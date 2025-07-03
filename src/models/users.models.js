@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcryptjs";
-import { JsonWebTokenError } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 const userSchema = mongoose.Schema({
     username: {
@@ -10,7 +10,7 @@ const userSchema = mongoose.Schema({
         trim: true,
         lowercase: true,
     },
-    watchHistroy: [
+    watchHistory: [
         {
             type: Schema.Types.ObjectId,
             ref: "Video"
@@ -66,7 +66,7 @@ userSchema.methods.generateAccessToken = function () {
 userSchema.methods.generateRefreshToken = function () {
     return jwt.sign({
         _id: this._id,
-    }, process.env.REFRESH_TOKEN, { expiresIn: process.env.RERESH_TOKEN_EXPIRY })
+    }, process.env.REFRESH_TOKEN, { expiresIn: process.env.REFRESH_TOKEN_EXPIRY })
 }
 
 export const User = mongoose.model("User", userSchema)
