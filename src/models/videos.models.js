@@ -31,14 +31,14 @@ const videoSchema = mongoose.Schema({
     },
     views: {
         type: Number,
-        default:0,
+        default: 0,
     },
     isPublished: {
         type: Boolean,
-        default:true
+        default: true
     }
 }, {
     timestamps: true
 }
 )
-export const Video = mongoose.model("Video",videoSchema)
+export const Video = mongoose.model("Video", videoSchema)
