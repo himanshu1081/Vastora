@@ -144,15 +144,163 @@ const currentUser = asyncHandler(async (req, res) => {
 const updateDetails = asyncHandler(async (req, res) => {
     const user = req.user;
     const { fullName, email } = req.body;
-    if (!fullName || !email) {
-        throw new ApiError(400, "Fill all details")
+    if (!fullName && !email) {
+        throw new ApiError(400, "At least one field is required")
     }
+    if (fullName) user.fullName = fullName;
+    if (email) user.email = email;
 
-    user.fullName = fullName;
-    user.email = email;
     await user.save({ validateBeforeSave: true });
 
     return res.status(200).json(new ApiResponse(200, null, "Details Updated"))
-})
+});
 
-export { loginUser, registerUser, logoutUser, refreshAccessToken, changePassword, currentUser, updateDetails };
+const updateAvatar = asyncHandler(async (req, res) => {
+    const avatarLocalPath = req.file?.path;
+    if (!avatarLocalPath) {
+        throw new ApiError(400, "No file found");
+    }
+    const avatar = await uploadOnCloudinary(avatarLocalPath);
+    if (!avatar) {
+        throw new ApiError(500, "Failed to upload");
+    }
+    await User.findByIdAndUpdate(req.user._id, { avatar: avatar.url })
+    return res.status(200).json(new ApiResponse(200, null, "Avatar updated"));
+});
+
+const updateCoverImage = asyncHandler(async (req, res) => {
+    const coverImageLocalPath = req.file?.path;
+    if (!coverImageLocalPath) {
+        throw new ApiError(400, "No file found");
+    }
+    const coverImage = await uploadOnCloudinary(coverImageLocalPath);
+    if (!coverImage) {
+        throw new ApiError(500, "Failed to upload");
+    }
+    await User.findByIdAndUpdate(req.user._id, { coverImage: coverImage.url })
+    return res.status(200).json(new ApiResponse(200, null, "Cover image updated"));
+});
+
+const getUserChannelProfile = asyncHandler(async (req, res) => {
+    const { username } = req.params;
+    if (!username?.trim()) {
+        throw new ApiError(400, "No user found");
+    }
+    var ownProfile;
+    if (req.user.username == username) {
+        ownProfile = true;
+    } else {
+        ownProfile = false;
+    }
+
+    const channel = await User.aggregate([
+        {
+            $match: {
+                username: username
+            }
+        },
+        {
+            $lookup: {
+                from: "subscriptions",
+                localField: "_id",
+                foreignField: "channel",
+                as: "subscribers"
+            }
+        }, {
+            $lookup: {
+                from: "subscriptions",
+                localField: "_id",
+                foreignField: "subscriber",
+                as: "subscribedTo"
+            }
+        }, {
+            $addFields: {
+                subscriberCount: {
+                    $size: "$subscribers"
+                },
+                subcribedCount: {
+                    $size: "$subscribedTo"
+                },
+                isSubscribered: {
+                    $cond: {
+                        if: { $in: [req.user._id, "$subscribers.subscriber"] },
+                        then: true,
+                        else: false
+                    }
+                }
+            }
+        }, {
+            $project: {
+                fullName: 1,
+                username: 1,
+                subscriberCount: 1,
+                subcribedCount: 1,
+                isSubscribered: 1,
+                avatarImage: 1,
+                coverImage: 1,
+                email: 1
+            }
+        }
+    ])
+    if (!channel?.length) {
+        throw new ApiError(404, "No channel Exists");
+    }
+    res.status(200).json(new ApiResponse(200, { ...channel[0], ownProfile }, "Channel Fetched"));
+});
+const getWatchHistory = asyncHandler(async (req, res) => {
+    const { _id } = req.user;
+    const watchHistory = await User.aggregate([
+        { $match: _id },
+        {
+            $lookup: {
+                from: "videos",
+                localField: "watchHistory",
+                foreignField: "_id",
+                as: "watchHistory",
+                pipeline: [
+                    {
+                        $lookup: {
+                            from: "users",
+                            localField: "owner",
+                            foreignField: "_id",
+                            as: "owner"
+                        }
+                    },
+                    {
+                        $unwind: {
+                            path: "$owner",
+                            preserveNullAndEmptyArrays: true
+                        }
+                    }, {
+                        $project: {
+                            _id: 1,
+                            title: 1,
+                            thumbnail: 1,
+                            duration: 1,
+                            views: 1,
+                            createdAt: 1,
+                            ownerId: "$owner._id",
+                            ownerUsername: "$owner.username",
+                            ownerAvatar: "$owner.avatar"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            $project: {
+                watchHistory: 1,
+                username: 1,
+                fullName: 1,
+                avatar: 1,
+                coverImage: 1
+            }
+        }
+    ]);
+    res.status(200).json(new ApiResponse(200,watchHistory[0],"Watch History fetched successfully"))
+});
+
+export {
+    loginUser, registerUser, logoutUser, refreshAccessToken,getWatchHistory,updateDetails,
+    changePassword, currentUser, updateDetails, updateAvatar, updateCoverImage, getUserChannelProfile
+};
