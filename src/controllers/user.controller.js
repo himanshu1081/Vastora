@@ -1,7 +1,7 @@
-import { User } from "../models/users.models.js";
+import { User } from "../models/users.model.js";
 import ApiError from "../utils/ApiError.js";
 import asyncHandler from "../utils/asyncHandler.js";
-import ApiResponse from "../utils/ApiResponse.js"
+import ApiResponse from "../utils/ApiResponse.js";
 import uploadOnCloudinary from "../utils/cloudinary.js";
 import jwt from "jsonwebtoken"
 
@@ -105,7 +105,10 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     if (!token) {
         throw new ApiError(401, "No token found");
     }
-    const newToken = await jwt.verify(token, process.env.REFRESH_TOKEN)
+    const newToken = await jwt.verify(token, process.env.REFRESH_TOKEN);
+    if (!newToken) {
+        throw new ApiError(500, "Couldn't verify");
+    }
     const user = await User.findById(newToken._id);
     if (!user) {
         throw new ApiError(401, "No user exists");
@@ -117,7 +120,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     }
     return res.cookie("refreshToken", refreshToken, option)
         .cookie("accessToken", accessToken, option)
-        .json(new ApiResponse(200, null, "Cookie Refreshed"))
+        .json(new ApiResponse(200, accessToken, "Cookie Refreshed"))
 });
 
 const changePassword = asyncHandler(async (req, res) => {
@@ -250,7 +253,7 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
 const getWatchHistory = asyncHandler(async (req, res) => {
     const { _id } = req.user;
     const watchHistory = await User.aggregate([
-        { $match: _id },
+        { $match: { _id: new mongoose.Types.ObjectId(_id) } },
         {
             $lookup: {
                 from: "videos",
@@ -297,10 +300,10 @@ const getWatchHistory = asyncHandler(async (req, res) => {
             }
         }
     ]);
-    res.status(200).json(new ApiResponse(200,watchHistory[0],"Watch History fetched successfully"))
+    res.status(200).json(new ApiResponse(200, watchHistory[0], "Watch History fetched successfully"))
 });
 
 export {
-    loginUser, registerUser, logoutUser, refreshAccessToken,getWatchHistory,updateDetails,
-    changePassword, currentUser, updateDetails, updateAvatar, updateCoverImage, getUserChannelProfile
+    loginUser, registerUser, logoutUser, refreshAccessToken, getWatchHistory, updateDetails,
+    changePassword, currentUser, updateAvatar, updateCoverImage, getUserChannelProfile
 };

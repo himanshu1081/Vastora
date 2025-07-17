@@ -17,10 +17,16 @@ app.use(cookieParser())
 
 //routes import
 
-import router from "./routes/user.routes.js";
+import routerUser from "./routes/user.routes.js";
+import routerVideo from "./routes/video.routes.js";
+import routerLike from "./routes/likes.routes.js";
+import routerComment from "./routes/comment.route.js";
 
 //routes
-app.use("/api/v1/user", router)
+app.use("/api/v1/user", routerUser);
+app.use("/api/v1/videos", routerVideo);
+app.use("/api/v1/like",routerLike);
+app.use("api/v1/comment",routerComment);
 
 // global error handler
 app.use((err, req, res, next) => {

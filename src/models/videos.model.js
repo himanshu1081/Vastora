@@ -7,9 +7,16 @@ const videoSchema = mongoose.Schema({
         unique: true,
         trim: true,
     },
+    vPublicId: {
+        type: String,
+        required: true
+    },
+    tPublicId: {
+        type: String,
+        required: true
+    },
     thumbnail: {
         type: String,
-        required: true,
         unique: true,
         trim: true,
     },
@@ -22,8 +29,7 @@ const videoSchema = mongoose.Schema({
         required: true,
     },
     description: {
-        type: String,
-        required: true,
+        type: String
     },
     duration: {
         type: Number,
