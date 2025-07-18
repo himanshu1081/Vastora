@@ -5,6 +5,7 @@ import ApiResponse from "../utils/ApiResponse.js";
 import uploadOnCloudinary from "../utils/cloudinary.js";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 
 const registerUser = asyncHandler(async (req, res) => {
     const { fullName, username, password, email } = req.body;
@@ -152,7 +153,15 @@ const updateDetails = asyncHandler(async (req, res) => {
         throw new ApiError(400, "At least one field is required")
     }
     if (fullName) user.fullName = fullName;
-    if (email) user.email = email;
+
+    if (email) { 
+        const checkEmail = await User.findOne({email:email});
+        console.log(checkEmail)
+        if(checkEmail){
+            throw new ApiError(404,"Email already used");
+        }
+        user.email = email; 
+    }
 
     await user.save({ validateBeforeSave: true });
 
