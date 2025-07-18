@@ -7,6 +7,7 @@ import asyncHandler from "../utils/asyncHandler.js";
 import uploadOnCloudinary from "../utils/cloudinary.js";
 import { videoInfo } from "../utils/videoInfo.js";
 import { v2 as cloudinary } from "cloudinary"
+import { Likes } from "../models/likes.model.js";
 
 const videoUpload = asyncHandler(async (req, res) => {
     const { title, description } = req.body;
@@ -38,7 +39,7 @@ const videoUpload = asyncHandler(async (req, res) => {
         description: description || "",
         duration,
         vPublicId: videoFile.public_id,
-        tPublicId : thumbnail.public_id
+        tPublicId: thumbnail.public_id
     })
     res.status(200).json(new ApiResponse(200, videoDetails, "Video uploaded successfully"));
 });
@@ -68,16 +69,35 @@ const getVideos = asyncHandler(async (req, res) => {
 });
 
 const deleteVideo = asyncHandler(async (req, res) => {
-    const {_id,vPublicId,tPublicId} = req.video;
-    await cloudinary.uploader.destroy(vPublicId,{resource_type:"video"})
-    await cloudinary.uploader.destroy(tPublicId,{resource_type:"image"})
+    const { _id, vPublicId, tPublicId } = req.video;
+
+    //deleting video and file from the server (I am using cloudinary)
+    await cloudinary.uploader.destroy(vPublicId, { resource_type: "video" })
+    await cloudinary.uploader.destroy(tPublicId, { resource_type: "image" })
+
+    //Fetching all the comments on the video
+    const comment = await Comment.find({ video: _id })
+
+    //Getting their id's in an array using map
+    const commentIds = comment.map(c => c._id);
+
+    //deleting all the likes on the comments
+    await Likes.deleteMany({ comment: { $in: commentIds } })
+
+    //deleting likes from the video
+    await Likes.deleteMany({ video: _id })
+
+    //deleting all comments from the video
+    await Comment.deleteMany({ video: _id })
+
+    //deleting the video from database
     await Video.findByIdAndDelete(_id);
     res.status(200).json(new ApiResponse(200, null, "Video deleted successfully"))
 });
 
 const updateVideo = asyncHandler(async (req, res) => {
     const { title, description } = req.body;
-    const { _id } = req.query;
+    const { _id } = req.video;
     const updateData = {};
     const newThumbnailPath = req.file?.path;
     if (newThumbnailPath) {
@@ -101,7 +121,7 @@ const watchVideo = asyncHandler(async (req, res) => {
     if (!videoId) {
         return res.redirect("/");
     }
-    const video = await Video.findByIdAndUpdate(videoId, { $inc: { views: 1 } });
+    const video = await Video.findByIdAndUpdate(videoId, { $inc: { views: 1 } }).select('title description duration views thumbnail videoFile');
     if (!video) {
         throw new ApiError(404, "Video does not exist");
     }

@@ -20,10 +20,10 @@ routerVideo.route("/upload-video").post(
     , verifyJWT, videoUpload);
 
 routerVideo.route("/is-published/:videoId").patch(verifyJWT, checkOwner, publishedToggle);
-routerVideo.route("/videos").get(verifyJWT, getVideos);
+routerVideo.route("/").get(verifyJWT, getVideos);
 routerVideo.route("/del-video/:videoId").delete(verifyJWT, checkOwner, deleteVideo);
-routerVideo.route("/update-video").patch(verifyJWT, checkOwner, updateVideo);
-routerVideo.route("/watch/:videoId").patch(watchVideo);
+routerVideo.route("/update-video/:videoId").patch(verifyJWT, checkOwner, updateVideo);
+routerVideo.route("/watch/:videoId").get(watchVideo);
 
 
 export default routerVideo;
