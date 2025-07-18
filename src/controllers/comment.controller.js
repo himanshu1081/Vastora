@@ -3,6 +3,7 @@ import ApiResponse from "../utils/ApiResponse.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import mongoose from "mongoose";
 import { Comment } from "../models/comment.model.js";
+import doExist from "../utils/doExist.js";
 
 
 const addComment = asyncHandler(async (req, res) => {

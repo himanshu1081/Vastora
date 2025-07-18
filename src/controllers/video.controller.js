@@ -1,4 +1,3 @@
-import { response } from "express";
 import { User } from "../models/users.model.js";
 import { Video } from "../models/videos.model.js";
 import ApiError from "../utils/ApiError.js";
@@ -8,6 +7,8 @@ import uploadOnCloudinary from "../utils/cloudinary.js";
 import { videoInfo } from "../utils/videoInfo.js";
 import { v2 as cloudinary } from "cloudinary"
 import { Likes } from "../models/likes.model.js";
+import doExist from "../utils/doExist.js";
+import mongoose from "mongoose";
 
 const videoUpload = asyncHandler(async (req, res) => {
     const { title, description } = req.body;
@@ -118,24 +119,22 @@ const updateVideo = asyncHandler(async (req, res) => {
 
 const watchVideo = asyncHandler(async (req, res) => {
     const { videoId } = req.params;
+    await doExist(videoId)
     if (!videoId) {
         return res.redirect("/");
     }
     const video = await Video.findByIdAndUpdate(videoId, { $inc: { views: 1 } }).select('title description duration views thumbnail videoFile');
-    if (!video) {
-        throw new ApiError(404, "Video does not exist");
-    }
+    const videoObjectId = new mongoose.Types.ObjectId(videoId);
     const user = req.user;
     if (user) {
         await User.findByIdAndUpdate(user._id, {
             $push: {
                 watchHistory: {
-                    $each: [videoId],
+                    $each: [videoObjectId],
                     $position: 0
                 }
             }
         })
-
     }
     res.status(200).json(new ApiResponse(200, video, "View counted"))
 });

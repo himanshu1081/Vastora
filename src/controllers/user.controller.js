@@ -3,7 +3,8 @@ import ApiError from "../utils/ApiError.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import uploadOnCloudinary from "../utils/cloudinary.js";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 
 const registerUser = asyncHandler(async (req, res) => {
     const { fullName, username, password, email } = req.body;
@@ -250,6 +251,7 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
     }
     res.status(200).json(new ApiResponse(200, { ...channel[0], ownProfile }, "Channel Fetched"));
 });
+
 const getWatchHistory = asyncHandler(async (req, res) => {
     const { _id } = req.user;
     const watchHistory = await User.aggregate([

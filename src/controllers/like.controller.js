@@ -43,11 +43,12 @@ const likeVideoToggle = asyncHandler(async (req, res) => {
 const likeCommentToggle = asyncHandler(async (req, res) => {
     const userId = req.user._id;
     const commentId = req.params.commentId;
+    let { type } = req.body;
+    type = type.toLowerCase();
     const comment = await Comment.findById(commentId);
     if (!comment) {
         throw new ApiError(404, "No comment exist");
     }
-    const { type } = req.body;
 
     const existing = await Likes.findOne({ comment: commentId, toggledBy: userId })
 
@@ -57,7 +58,7 @@ const likeCommentToggle = asyncHandler(async (req, res) => {
     if (type == "like" || type == "dislike") {
         if (!existing) {
             await Likes.create({
-                video: videoId,
+                comment: commentId,
                 toggledBy: userId,
                 likeToggle: type
             })

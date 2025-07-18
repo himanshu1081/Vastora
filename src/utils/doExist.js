@@ -1,5 +1,6 @@
 import { Video } from "../models/videos.model.js";
 import mongoose from "mongoose";
+import ApiError from "./ApiError.js";
 
 const doExist = async (videoId) => {
     if (!mongoose.Types.ObjectId.isValid(videoId)) {

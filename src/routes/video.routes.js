@@ -23,7 +23,7 @@ routerVideo.route("/is-published/:videoId").patch(verifyJWT, checkOwner, publish
 routerVideo.route("/").get(verifyJWT, getVideos);
 routerVideo.route("/del-video/:videoId").delete(verifyJWT, checkOwner, deleteVideo);
 routerVideo.route("/update-video/:videoId").patch(verifyJWT, checkOwner, updateVideo);
-routerVideo.route("/watch/:videoId").get(watchVideo);
+routerVideo.route("/watch/:videoId").get(verifyJWT,watchVideo);
 
 
 export default routerVideo;
