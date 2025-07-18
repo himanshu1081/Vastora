@@ -80,6 +80,10 @@ const deleteComment = asyncHandler(async (req, res) => {
     if (!isCommentOwner && !isVideoOwner) {
         throw new ApiError(200, "You can't delete this comment");
     }
+
+    const likes = await Likes.find({ comment: commentId })
+    const likeIds = likes.map(l => l._id);
+    await Likes.deleteMany({ _id: { $in: commentIds } })
     await Comment.findByIdAndDelete(commentId)
 
     res.status(200).json(new ApiResponse(200, null, "Comment deleted"));
