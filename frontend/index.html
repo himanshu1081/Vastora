@@ -1,48 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Register</title>
-</head>
-<body>
-  <h2>User Registration</h2>
-
-  <form id="registerForm" enctype="multipart/form-data">
-    <input type="text" name="fullName" placeholder="Full Name" required /><br /><br>
-    <input type="text" name="userName" placeholder="Username" required /><br /><br>
-    <input type="email" name="email" placeholder="Email" required /><br /><br>
-    <input type="password" name="password" placeholder="Password" required /><br /><br>
-
-    <label>Avatar:</label>
-    <input type="file" name="avatar"><br /><br>
-
-    <label>Cover Image:</label>
-    <input type="file" name="coverImage"><br /><br>
-
-    <button type="submit">Register</button>
-  </form>
-
-  <script>
-  const form = document.getElementById("registerForm");
-
-  form.addEventListener("submit", async function (e) {
-    e.preventDefault(); // 🚫 This line prevents refresh
-
-    const formData = new FormData(form);
-
-    try {
-      const res = await fetch("http://localhost:8000/api/v1/user/register", {
-        method: "POST",
-        body: formData
-      });
-
-      const data = await res.json();
-      alert("✅ " + data.message);
-    } catch (err) {
-      alert("❌ " + err.message);
-      console.error(err);
-    }
-  });
-</script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + React</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>

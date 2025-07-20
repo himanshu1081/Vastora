@@ -1,0 +1,22 @@
+@font-face {
+  font-family: 'Mooxy';
+  src: url('/fonts/mooxy.ttf')
+}
+
+@font-face {
+  font-family: 'Aonic-Medium';
+  src: url('/public/fonts/Aonic-Medium.ttf');
+}
+
+@font-face {
+  font-family: Vcr;
+  src: url('/fonts/VCR_OSD_MONO_1.001.ttf');
+  font-display: swap;
+}
+
+@theme {
+  --font-vcr: Vcr, "sans-serif"
+}
+
+@import "tailwindcss";
+@import "tailwindcss/preflight.css" layer(base);
