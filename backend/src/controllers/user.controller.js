@@ -69,7 +69,7 @@ const loginUser = asyncHandler(async (req, res) => {
         $or: [{ username: identifier }, { email: identifier }]
     })
     if (!user) {
-        throw new ApiError(404, "No user exists!");
+        throw new ApiError(401, "No user exists!");
     }
 
     if (await user.toCheckPassword(password)) {
@@ -85,7 +85,7 @@ const loginUser = asyncHandler(async (req, res) => {
             new ApiResponse(200, { userData, accessToken, refreshToken }, "Cookies sent!")
         )
     } else {
-        throw new ApiError(404, "Please check your password");
+        throw new ApiError(401, "Please check your password!");
     }
 });
 
@@ -154,13 +154,13 @@ const updateDetails = asyncHandler(async (req, res) => {
     }
     if (fullName) user.fullName = fullName;
 
-    if (email) { 
-        const checkEmail = await User.findOne({email:email});
+    if (email) {
+        const checkEmail = await User.findOne({ email: email });
         console.log(checkEmail)
-        if(checkEmail){
-            throw new ApiError(404,"Email already used");
+        if (checkEmail) {
+            throw new ApiError(404, "Email already used");
         }
-        user.email = email; 
+        user.email = email;
     }
 
     await user.save({ validateBeforeSave: true });

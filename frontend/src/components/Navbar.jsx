@@ -1,15 +1,157 @@
 import { NavLink } from "react-router-dom"
+import { IoIosSearch } from "react-icons/io";
+import { useSelector, useDispatch } from "react-redux";
+import { useState } from "react";
+import { login, logout } from "../features/authSlice.js"
+import { showSidebar, hideSidebar } from '../features/sidebarSlice.js';
+
+//Icons
+import { IoMdSettings } from "react-icons/io";
+import { HiDotsVertical } from "react-icons/hi";
+import { CgProfile } from "react-icons/cg";
+import { FaPlus } from "react-icons/fa6";
+import { FiSidebar } from "react-icons/fi";
+
+
 
 const Navbar = () => {
+    const [search, setSearch] = useState("");
+    const [dropdown, setDropdown] = useState(null);
+
+    const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+    const dispatch = useDispatch();
+
+    const sidebar = useSelector(state => state.sidebar.showSidebar);
+
+    const handleChange = (e) => {
+        setSearch(e.target.value);
+    }
+    const handleKey = (e) => {
+        if (e.key == 'Enter') {
+            if (search.trim() != "") {
+                handleSearch();
+            }
+        }
+    }
+
+    const handleAuth = () => {
+        if (isLoggedIn == true) {
+            dispatch(logout())
+        } else if (isLoggedIn == false) {
+            dispatch(login())
+        }
+    }
+
+    const Settings = () => {
+        return (
+            <>
+                {(dropdown == "profile" || dropdown == "dots") &&
+                    <div
+                        className="fixed z-24 inset-0"
+                        onClick={() => setDropdown(null)}>
+                    </div>}
+
+                <div
+                    className={`transition-all duration-300 ease-in-out absolute top-5 md:top-10 right-2 z-25 h-fit w-25 sm:w-35 py-1 sm:py-3 bg-[#3f464d] rounded-md shadow-[0_0_10px_black] text-white text-xs sm:text-base flex justify-center flex-col 
+                    ${dropdown ? "opacity-100 translate-y-0" : "translate-y-2 opacity-0 pointer-events-none"}`}>
+
+                    <div className="flex justify-start items-center gap-2 p-1 md:py-3 w-full hover:bg-[#1b1f22]">
+                        <IoMdSettings className="size-5 md:size-6" />
+                        <span>Settings</span>
+                    </div>
+
+                    {
+                        isLoggedIn &&
+                        <>
+                            <NavLink to='/profile' className="flex justify-start items-center gap-2 p-2 w-full hover:bg-[#1b1f22] ">
+                                <CgProfile className="size-5 md:size-6" />
+                                <span>
+                                    Profile
+                                </span>
+                            </NavLink>
+                            <NavLink
+                                to='/'
+                                onClick={() => { handleAuth(); setDropdown(null) }}
+                                className="flex justify-start items-center gap-2  p-2 w-full hover:bg-[#1b1f22]  cursor-pointer">
+                                <CgProfile className="size-5 md:size-6" />
+                                <span>
+                                    Log out
+                                </span>
+                            </NavLink>
+                        </>
+                    }
+                </div>
+            </>
+        );
+    }
+
+    const fakeUser = {
+        name: "Himanshu Chaudhary",
+        username: "himanshu108",
+        avatar: "/assets/default-avatar.png"
+    }
+
     return (
         <>
-            <div className="fixed left-0 top-0 z-25 bg-black text-white flex items-center justify-between w-full h-20 font-vcr px-12 h-15 ">
-                <NavLink to='/' className={({ isActive }) => `font-vcr font-bold text-4xl p-12`}>Vastora</NavLink>
-                <div className="flex gap-15 flex items-center justify-between ">
-                    <NavLink to='/history' className={({ isActive }) => `${isActive ? "underline decoration-white decoration-4 underline-offset-4" : ""} hover:text-[#3f464d]`}>History</NavLink>
-                    <NavLink to='/profile' className={({ isActive }) => `${isActive ? "underline decoration-white decoration-4 underline-offset-4" : ""} hover:text-[#3f464d]`}>Profile</NavLink>
-                    <NavLink to='/watch' className={({ isActive }) => `${isActive ? "underline decoration-white decoration-4 underline-offset-4" : ""} hover:text-[#3f464d]`}>Watch</NavLink>
-                    <NavLink to='/login' className={({ isActive }) => `transition-all 300ms  ease-in-out bg-[#1b1f22] p-4 rounded-4xl ${isActive ? "font-bold" : ""} hover:bg-[#3f464d]`} >Log in</NavLink>
+            <div
+                className={`fixed left-0 top-0 
+            ${sidebar ? "z-25" : "z-50"}
+             bg-black text-white flex items-center justify-around sm:justify-between w-full h-10 sm:h-20 font-vcr md:px-12 `}
+            >
+                <div className="flex justify-around items-center">
+                    <div
+                        className="p-2 lg:hidden h-10 w-10 flex justify-center items-center">
+                        <FiSidebar
+                            className="size-3 sm:size-5"
+                            onClick={() => dispatch(showSidebar())} />
+                    </div>
+                    <NavLink
+                        to='/'
+                        className={`font-vcr font-bold text-xl sm:text-3xl md:text-4xl px-2`}>
+                        Vastora
+                    </NavLink>
+                </div>
+                <div
+                    className="transition-all duration-300 ease-in-out flex justify-start items-center bg-[#3f464d] h-6 w-50 sm:w-70 sm:h-10 md:w-100 rounded-4xl p-1 sm:p-2 md:p-4 border border-gray-400 hover:bg-[#1c1e1e]">
+                    <input type="text"
+                        className="focus:outline-none w-3/4 sm:w-full h-4 text-xs sm:text-xl "
+                        placeholder="Search"
+                        onKeyDown={handleKey}
+                        onChange={handleChange}>
+                    </input>
+                    <IoIosSearch
+                        color="white"
+                        className="transition all 100ms hover:bg-zinc-800 rounded-full size-6 sm:size-10 p-1 cursor-pointer" />
+                </div>
+                <div
+                    className="flex justify-end items-center gap-2">
+                    {isLoggedIn ?
+                        (
+                            <div
+                                className="relative flex justify-center items-center gap-3 px-2">
+                                <NavLink
+                                    to='/profile'
+                                    className="flex justify-center items-center transition-all duration-200 ease-in-out h-5 sm:h-10 w-15 sm:w-25  gap-1 text-sm md:text-lg rounded-4xl  hover:bg-[#3f464d] ">
+                                    <FaPlus
+                                        className="size-2 sm:size-5" />
+                                    <span className="text-xs sm:text-base">
+                                        Create
+                                    </span>
+                                </NavLink>
+                                <img src={fakeUser.avatar} className="rounded-full w-5 sm:w-10 h-5 sm:h-10 cursor-pointer" alt="your-avatar" onClick={() => setDropdown("profile")} />
+                                {dropdown == "profile" && <Settings />}
+                            </div >)
+                        :
+                        (<div className="flex gap-1 md:gap-4 items-center justify-center md:justify-between pr-3 ">
+                            <div className="relative">
+                                <HiDotsVertical className="size-3 sm:size-5 cursor-pointer rounded-full" onClick={() => { setDropdown("dots") }} />
+                                {dropdown == "dots" && <Settings />}
+                            </div>
+                            <NavLink to='/login'
+                                className="flex justify-center items-center transition-all duration-200 ease-in-out h-5 sm:h-10 w-10 sm:w-20 text-xs sm:text-base md:text-xl p-2 rounded-4xl  hover:bg-[#3f464d]"
+                                onClick={handleAuth}>Login</NavLink>
+                        </div>)
+                    }
                 </div>
             </div >
         </>

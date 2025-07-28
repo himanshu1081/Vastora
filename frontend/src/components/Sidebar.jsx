@@ -1,35 +1,68 @@
-import { useState } from "react";
-import { FaYoutube } from "react-icons/fa";
-import { PiSidebarFill } from "react-icons/pi";
 import { TiHome } from "react-icons/ti";
 import { NavLink } from "react-router-dom";
+import { RiChatHistoryFill } from "react-icons/ri";
+import { CgProfile } from "react-icons/cg";
+import { useDispatch, useSelector } from "react-redux";
+import { showSidebar, hideSidebar } from "../features/sidebarSlice.js";
+import { FiSidebar } from "react-icons/fi";
+import { MdSubscriptions } from "react-icons/md";
+import { FaHeart } from "react-icons/fa";
 
 function Sidebar() {
-    const [sidebar, setSidebar] = useState(false);
-    const ShowLable = ({ icon, lable, sidebar, link }) => {
-        return (
-            <NavLink to={link} className={({ isActive }) => `text-white rounded-lg flex justify-center items-center gap-12 p-4 w-[90%] h-10  ${isActive ? "bg-zinc-800" : "hover:bg-zinc-700"}`}>
-                {icon}
-                {sidebar && <span>{lable} </span>}
+    const sidebar = useSelector((state) => state.sidebar.showSidebar);
+    const dispatch = useDispatch();
 
+    const ShowLabel = ({ icon, label, link }) => {
+        return (
+            <NavLink
+                to={link}
+                className={({ isActive }) =>
+                    ` text-white text-base border-gray-700 flex items-center gap-2 p-4 h-10 w-full 
+                    ${sidebar ? "opacity-100 md:opacity-100" : "opacity-0 md:opacity-100"} 
+                    ${isActive ? "bg-[#1a1e21]" : ""} hover:bg-[#1a1e21]`
+                }
+            >
+                <div>{icon}</div>
+                {sidebar && <span>{label}</span>}
             </NavLink>
         );
-    }
+    };
+
     return (
         <>
-            {sidebar && <span className="h-screen w-screen bg-black/20 fixed"></span>}
-            <div className="h-screen fixed z-50 ">
-                <div className={`transition-all duration-300 ease-in-out flex flex-col items-center h-full bg-black w-3/4 font-vcr ${sidebar ? "w-64" : "w-16"}`} onMouseEnter={() => setSidebar(true)} onMouseLeave={() => setSidebar(false)}>
-                    <NavLink to='/' className={({ isActive }) => `transition-all duration-300 ease-in-out font-vcr text-white font-bold text-4xl h-20 w-full px-12 flex items-center ${isActive ? "font-bold" : ""} ${sidebar ? "opacity-100" : "opacity-0 pointer-events-none"} `}>Vastora</NavLink>
-                    <ShowLable lable="Home" sidebar={sidebar} link="/" icon={<TiHome size={25} color="white" />} />
-                    <ShowLable lable="History" sidebar={sidebar} link="/history" icon={<TiHome size={25} color="white" />} />
-                    <ShowLable lable="Profile" sidebar={sidebar} link="/profile" icon={<TiHome size={25} color="white" />} />
-                    <ShowLable lable="Home" sidebar={sidebar} link="/liked-videos" icon={<TiHome size={25} color="white" />} />
-                    <ShowLable lable="Home" sidebar={sidebar} link="/subscription" icon={<TiHome size={25} color="white" />} />
+            {sidebar && <span className="h-screen w-screen bg-black/20 fixed z-40 md:hidden"></span>}
+
+            <div className="fixed z-50 md:z-30 h-screen border-1 ">
+                <div
+                    className={`transition-all duration-300 ease-in-out flex flex-col items-center  h-full bg-black font-vcr
+                    ${sidebar ? "md:w-64 w-44" : "md:w-16 w-0"}`}
+                    onMouseEnter={() => dispatch(showSidebar())}
+                    onMouseLeave={() => dispatch(hideSidebar())}
+                >
+                    <div
+                        className={`flex justify-center items-center w-full px-4 py-5 
+                        ${sidebar ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+                    >
+                        <NavLink
+                            to="/"
+                            className="text-white font-bold text-2xl md:text-4xl w-fit"
+                        >
+                            Vastora
+                        </NavLink>
+                        <div className="p-2 md:hidden h-10 w-10 flex justify-center items-center text-white">
+                            <FiSidebar onClick={() => dispatch(hideSidebar())} />
+                        </div>
+                    </div>
+
+                    <ShowLabel label="Home" link="/" icon={<TiHome className="text-white size-5 md:size-6" />} />
+                    <ShowLabel label="History" link="/history" icon={<RiChatHistoryFill className="text-white size-5 md:size-6" />} />
+                    <ShowLabel label="Profile" link="/profile" icon={<CgProfile className="text-white size-5 md:size-6" />} />
+                    <ShowLabel label="Liked Videos" link="/liked-videos" icon={<FaHeart className="text-white size-5 md:size-6" />} />
+                    <ShowLabel label="Subscription" link="/subscription" icon={<MdSubscriptions className="text-white size-5 md:size-6" />} />
                 </div>
             </div>
         </>
-    )
+    );
 }
 
 export default Sidebar;

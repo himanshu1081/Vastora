@@ -1,9 +1,9 @@
-import Watch from "./pages/watch";
-import Register from "./pages/register";
-import Profile from "./pages/profile";
-import Login from "./pages/login";
-import Home from "./pages/home";
-import History from "./pages/history";
+import Watch from "./pages/Watch.jsx";
+import Register from "./pages/Register.jsx";
+import Profile from "./pages/Profile.jsx";
+import Login from "./pages/Login.jsx";
+import Home from "./pages/Home.jsx";
+import History from "./pages/History.jsx";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Navbar } from "./components/Navbar";
 
