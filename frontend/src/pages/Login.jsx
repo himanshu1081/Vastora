@@ -2,10 +2,14 @@ import BlurText from "../components/BlurTexts.jsx";
 import RotatingText from "../components/RotatingTexts.jsx";
 import { useState, useMemo } from "react";
 import Animation from "../components/Animation.jsx";
-import { NavLink } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom"
 import axiosInstance from "../util/axiosIntance.js";
+import { login, logout } from "../features/authSlice.js";
+import { useDispatch, useSelector } from "react-redux";
 
 function Login() {
+    const naviagte = useNavigate();
+    const dispatch = useDispatch()
     var size;
     if (innerWidth <= 450) {
         size = 10
@@ -18,6 +22,7 @@ function Login() {
         password: ""
     });
 
+
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     }
@@ -25,7 +30,7 @@ function Login() {
         <Animation size={8} elements={size} />
     ), []);
 
-    const [errMessage, setErrMessage] = useState("")
+    const [errMessage, setErrMessage] = useState(null)
 
     const handleLogIn = async () => {
         try {
@@ -36,6 +41,11 @@ function Login() {
                 }
             )
             console.log(res);
+            const { fullName, username, avatar, coverImage, email } = res.data?.data?.userData;
+            dispatch(login(
+                { fullName, username, avatar, coverImage, email }
+            ))
+            naviagte("/")
         }
         catch (err) {
             console.log("ERROR:", err);
@@ -49,7 +59,7 @@ function Login() {
             <div className="fixed h-screen w-screen z-0 bg-black">
                 {memoAnimation}
             </div>
-            <div className="fixed bg-black/30 backdrop-blur-md w-screen h-screen flex flex-col justify-center items-center z-23 font-inter gap-4">
+            <div className="fixed bg-black/30 backdrop-blur-md w-screen h-screen flex flex-col justify-center items-center z-23 font-figtree gap-4">
                 <div className="font-figtree text-white font-black flex justify-center items-center text-3xl sm:text-6xl gap-2">
                     <span >Vastora</span>
                     <RotatingText
@@ -86,19 +96,19 @@ function Login() {
                             className="w-full p-1 rounded-sm bg-white/50 shadow-sm shadow-black/50 focus:outline-0"
                             onChange={handleChange} />
                     </div>
-                    
+
                     <span
                         className="transition-all duration-200 ease-in-out bg-purple-700 rounded p-2 w-full flex justify-center items-center font-bold shadow-sm shadow-black/30 md:bg-purple-500 md:hover:bg-purple-700 hover:cursor-pointer"
                         onClick={handleLogIn}
                     >
                         Log in
                     </span>
-                    {errMessage.length > 2 &&
+                    {errMessage &&
                         <div className="text-red-400">
                             {errMessage}
                         </div>
                     }
-                    <p className="text-xs w-full md p-2 m-2 text-gray-400 flex flex-col justify-center items-center sm:gap-1">
+                    <p className="text-xs sm:text-sm w-full md p-2 m-2 text-gray-400 flex flex-col justify-center items-center sm:gap-1">
                         <span className="hover:cursor-default">Don't have an account?</span>
                         <NavLink to='/register' className="text-white "> Register now</NavLink>
                     </p>

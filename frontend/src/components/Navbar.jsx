@@ -2,7 +2,6 @@ import { NavLink } from "react-router-dom"
 import { IoIosSearch } from "react-icons/io";
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
-import { login, logout } from "../features/authSlice.js"
 import { showSidebar, hideSidebar } from '../features/sidebarSlice.js';
 
 //Icons
@@ -18,7 +17,8 @@ const Navbar = () => {
     const [search, setSearch] = useState("");
     const [dropdown, setDropdown] = useState(null);
 
-    const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+    const { userData, isLoggedIn } = useSelector(state => state.auth);
+    console.log(userData.avatar)
     const dispatch = useDispatch();
 
     const sidebar = useSelector(state => state.sidebar.showSidebar);
@@ -34,13 +34,6 @@ const Navbar = () => {
         }
     }
 
-    const handleAuth = () => {
-        if (isLoggedIn == true) {
-            dispatch(logout())
-        } else if (isLoggedIn == false) {
-            dispatch(login())
-        }
-    }
 
     const Settings = () => {
         return (
@@ -85,11 +78,6 @@ const Navbar = () => {
         );
     }
 
-    const fakeUser = {
-        name: "Himanshu Chaudhary",
-        username: "himanshu108",
-        avatar: "/assets/default-avatar.png"
-    }
 
     return (
         <>
@@ -128,7 +116,7 @@ const Navbar = () => {
                     {isLoggedIn ?
                         (
                             <div
-                                className="relative flex justify-center items-center gap-3 px-2">
+                                className="relative flex justify-center items-center gap-3 md:gap-5 px-2">
                                 <NavLink
                                     to='/profile'
                                     className="flex justify-center items-center transition-all duration-200 ease-in-out h-5 sm:h-10 w-15 sm:w-25  gap-1 text-sm md:text-lg rounded-4xl  hover:bg-[#3f464d] ">
@@ -138,7 +126,7 @@ const Navbar = () => {
                                         Create
                                     </span>
                                 </NavLink>
-                                <img src={fakeUser.avatar} className="rounded-full w-5 sm:w-10 h-5 sm:h-10 cursor-pointer" alt="your-avatar" onClick={() => setDropdown("profile")} />
+                                <img src={userData.avatar || "/assets/default-avatar.png"} className="rounded-full w-5 sm:w-10 h-5 sm:h-10 cursor-pointer" alt="your-avatar" onClick={() => setDropdown("profile")} />
                                 {dropdown == "profile" && <Settings />}
                             </div >)
                         :
@@ -148,8 +136,10 @@ const Navbar = () => {
                                 {dropdown == "dots" && <Settings />}
                             </div>
                             <NavLink to='/login'
-                                className="flex justify-center items-center transition-all duration-200 ease-in-out h-5 sm:h-10 w-10 sm:w-20 text-xs sm:text-base md:text-xl p-2 rounded-4xl  hover:bg-[#3f464d]"
-                                onClick={handleAuth}>Login</NavLink>
+                                className="flex justify-center items-center transition-all duration-200 ease-in-out 
+                                h-5 sm:h-10 w-10 sm:w-20 text-xs sm:text-base md:text-xl p-2 rounded-4xl  hover:bg-[#3f464d]"
+                            >Login
+                            </NavLink>
                         </div>)
                     }
                 </div>

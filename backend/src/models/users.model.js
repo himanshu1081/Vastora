@@ -31,7 +31,7 @@ const userSchema = mongoose.Schema({
     },
     coverImage: {
         type: String,
-        required: true,
+        default: "",
     },
     password: {
         type: String,

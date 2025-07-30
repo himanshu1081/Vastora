@@ -10,7 +10,7 @@ import bcrypt from "bcryptjs";
 const registerUser = asyncHandler(async (req, res) => {
     const { fullName, username, password, email } = req.body;
     if (!fullName || !username || !password || !email) {
-        throw new ApiError(404, "All fields not filled!");
+        throw new ApiError(404, "All fields are required !");
     }
     const existedUser = await User.findOne({
         $or: [{ username }, { email }]
@@ -18,16 +18,22 @@ const registerUser = asyncHandler(async (req, res) => {
 
     if (existedUser) {
         if (existedUser.username === username) {
-            throw new ApiError(407, "Username already exists")
+            throw new ApiError(400, "Username already exists")
         } else if (existedUser.email === email) {
-            throw new ApiError(407, "Email already exists")
+            throw new ApiError(400, "Email already exists")
         }
     }
+    const avatarLocalPath = req.files?.avatar?.[0]?.path;
+    const coverImageLocalPath = req.files?.coverImage?.[0]?.path;
+    let avatar = null;
+    let coverImage = null;
+    if (avatarLocalPath) {
+        avatar = await uploadOnCloudinary(avatarLocalPath);
+    }
+    if (coverImageLocalPath) {
+        coverImage = await uploadOnCloudinary(coverImageLocalPath);
+    }
 
-    const avatarLocalPath = req.files?.avatar[0]?.path;
-    const coverImageLocalPath = req.files?.coverImage[0]?.path;
-    const avatar = await uploadOnCloudinary(avatarLocalPath);
-    const coverImage = await uploadOnCloudinary(coverImageLocalPath);
 
     const user = await User.create({
         email,
@@ -65,6 +71,9 @@ const generateAccessTokenAndRefreshToken = async (user) => {
 
 const loginUser = asyncHandler(async (req, res) => {
     const { identifier, password } = req.body;
+    if (!identifier.trim() || !password.trim()) {
+        throw new ApiError(400, "Username/email and password required")
+    }
     const user = await User.findOne({
         $or: [{ username: identifier }, { email: identifier }]
     })
