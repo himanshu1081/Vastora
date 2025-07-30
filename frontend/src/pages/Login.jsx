@@ -21,6 +21,12 @@ function Login() {
         identifier: "",
         password: ""
     });
+    
+    const handleKey=(e)=>{
+        if(e.key=='Enter'){
+            handleLogIn()
+        }
+    }
 
 
     const handleChange = (e) => {
@@ -41,7 +47,7 @@ function Login() {
                 }
             )
             console.log(res);
-            const { fullName, username, avatar, coverImage, email } = res.data?.data?.userData;
+            const { fullName, username, avatar, coverImage, email } = res?.data?.data?.userData;
             dispatch(login(
                 { fullName, username, avatar, coverImage, email }
             ))
@@ -94,12 +100,14 @@ function Login() {
                             type="password"
                             placeholder="Password"
                             className="w-full p-1 rounded-sm bg-white/50 shadow-sm shadow-black/50 focus:outline-0"
-                            onChange={handleChange} />
+                            onChange={handleChange}
+                            onKeyDown={handleKey} />
                     </div>
 
                     <span
                         className="transition-all duration-200 ease-in-out bg-purple-700 rounded p-2 w-full flex justify-center items-center font-bold shadow-sm shadow-black/30 md:bg-purple-500 md:hover:bg-purple-700 hover:cursor-pointer"
                         onClick={handleLogIn}
+                        
                     >
                         Log in
                     </span>

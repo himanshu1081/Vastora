@@ -17,7 +17,7 @@ function Sidebar() {
             <NavLink
                 to={link}
                 className={({ isActive }) =>
-                    ` text-white text-base border-gray-700 flex items-center gap-2 p-4 h-10 w-full 
+                    ` text-white text-base border-gray-700 flex items-center gap-2 p-4 h-10 w-full font-figtree
                     ${sidebar ? "opacity-100 md:opacity-100" : "opacity-0 md:opacity-100"} 
                     ${isActive ? "bg-[#1a1e21]" : ""} hover:bg-[#1a1e21]`
                 }

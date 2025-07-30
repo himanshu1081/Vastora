@@ -88,7 +88,8 @@ const loginUser = asyncHandler(async (req, res) => {
         console.log(`Welcome back ${user.fullName}`)
         const option = {
             httpOnly: true,
-            secure: true
+            sameSite: 'Lax',
+            secure: false
         }
         return res.status(200).cookie("accessToken", accessToken, option).cookie("refreshToken", refreshToken, option).json(
             new ApiResponse(200, { userData, accessToken, refreshToken }, "Cookies sent!")
@@ -104,7 +105,8 @@ const logoutUser = asyncHandler(async (req, res) => {
     await userData.save({ validateBeforeSave: false })
     const option = {
         httpOnly: true,
-        secure: true
+        sameSite: 'Lax',
+        secure: false
     }
     res.clearCookie("refreshToken", option).clearCookie("accessToken", option).json({
         message: "Cookies cleared"
