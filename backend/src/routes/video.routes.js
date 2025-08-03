@@ -6,7 +6,7 @@ import checkOwner from "../middlewares/checkOwner.middleware.js";
 
 const routerVideo = Router();
 
-routerVideo.route("/upload-video").post(
+routerVideo.route("/upload").post(
     upload.fields([
         {
             name: "videoFile",

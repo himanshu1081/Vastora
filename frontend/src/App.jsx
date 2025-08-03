@@ -6,6 +6,7 @@ import Home from "./pages/Home.jsx";
 import History from "./pages/History.jsx";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Navbar } from "./components/Navbar";
+import Upload from "./pages/Upload.jsx";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,11 @@ const router = createBrowserRouter([
     path: "/history",
     element:
       <History />
+  },
+  {
+    path: "/upload",
+    element:
+      <Upload />
   }
 ])
 

@@ -19,7 +19,7 @@ function Sidebar() {
                 className={({ isActive }) =>
                     ` text-white text-base border-gray-700 flex items-center gap-2 p-4 h-10 w-full font-figtree
                     ${sidebar ? "opacity-100 md:opacity-100" : "opacity-0 md:opacity-100"} 
-                    ${isActive ? "bg-[#1a1e21]" : ""} hover:bg-[#1a1e21]`
+                    ${isActive ? "bg-[#8200db]/30" : ""} hover:bg-[#8200db]/20`
                 }
             >
                 <div>{icon}</div>
@@ -32,12 +32,16 @@ function Sidebar() {
         <>
             {sidebar && <span className="h-screen w-screen bg-black/20 fixed z-40 md:hidden"></span>}
 
-            <div className="fixed z-50 md:z-30 h-screen border-1 ">
+            <div className="fixed z-50 md:z-30 h-screen ">
                 <div
                     className={`transition-all duration-300 ease-in-out flex flex-col items-center  h-full bg-black font-vcr
                     ${sidebar ? "md:w-64 w-44" : "md:w-16 w-0"}`}
-                    onMouseEnter={() => dispatch(showSidebar())}
-                    onMouseLeave={() => dispatch(hideSidebar())}
+                    onMouseEnter={() => {
+                        if (window.innerWidth >= 768) dispatch(showSidebar());
+                    }}
+                    onMouseLeave={() => {
+                        if (window.innerWidth >= 768) dispatch(hideSidebar());
+                    }}
                 >
                     <div
                         className={`flex justify-center items-center w-full px-4 py-5 
@@ -47,7 +51,7 @@ function Sidebar() {
                             to="/"
                             className="text-white font-bold text-2xl md:text-4xl w-fit"
                         >
-                            Vastora
+                            VASTORA
                         </NavLink>
                         <div className="p-2 md:hidden h-10 w-10 flex justify-center items-center text-white">
                             <FiSidebar onClick={() => dispatch(hideSidebar())} />

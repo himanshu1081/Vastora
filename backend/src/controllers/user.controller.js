@@ -28,10 +28,12 @@ const registerUser = asyncHandler(async (req, res) => {
     let avatar = null;
     let coverImage = null;
     if (avatarLocalPath) {
-        avatar = await uploadOnCloudinary(avatarLocalPath);
+        let url = await uploadOnCloudinary(avatarLocalPath); 
+        avatar = url.replace("/upload/", "/upload/f_auto/")
     }
     if (coverImageLocalPath) {
-        coverImage = await uploadOnCloudinary(coverImageLocalPath);
+        let url = await uploadOnCloudinary(overImageLocalPath); 
+        coverImage = url.replace("/upload/","/upload/f_auto");
     }
 
 

@@ -12,7 +12,7 @@ function Login() {
     const dispatch = useDispatch()
     var size;
     if (innerWidth <= 450) {
-        size = 10
+        size = 20
     } else {
         size = 40
     }
