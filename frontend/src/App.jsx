@@ -7,6 +7,8 @@ import History from "./pages/History.jsx";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Navbar } from "./components/Navbar";
 import Upload from "./pages/Upload.jsx";
+import { Toaster } from 'react-hot-toast';
+
 
 const router = createBrowserRouter([
   {
@@ -52,6 +54,7 @@ function App() {
   return (
     <div>
       <RouterProvider router={router} />
+      <Toaster position="top-center" />
     </div>
   );
 }

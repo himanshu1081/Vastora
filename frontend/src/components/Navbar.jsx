@@ -156,7 +156,7 @@ const Navbar = () => {
         {isLoggedIn ? (
           <div className="relative flex justify-center items-center gap-3 md:gap-5 px-2">
             <NavLink
-              to="/profile"
+              to="/upload"
               className="flex justify-center items-center transition-all duration-200 ease-in-out h-5 sm:h-10 w-15 sm:w-25 gap-1 text-sm md:text-lg rounded-4xl hover:bg-[#3f464d]"
             >
               <FaPlus className="size-2 sm:size-5" />
