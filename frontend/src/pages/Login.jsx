@@ -1,11 +1,10 @@
-import BlurText from "../components/BlurTexts.jsx";
 import RotatingText from "../components/RotatingTexts.jsx";
 import { useState, useMemo } from "react";
 import Animation from "../components/Animation.jsx";
 import { NavLink, useNavigate } from "react-router-dom"
 import axiosInstance from "../util/axiosIntance.js";
-import { login, logout } from "../features/authSlice.js";
-import { useDispatch, useSelector } from "react-redux";
+import { login,} from "../features/authSlice.js";
+import { useDispatch} from "react-redux";
 
 function Login() {
     const naviagte = useNavigate();

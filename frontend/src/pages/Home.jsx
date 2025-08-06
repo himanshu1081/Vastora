@@ -1,8 +1,13 @@
+import { useEffect } from "react";
 import Card from "../components/Card.jsx";
 import { Navbar } from "../components/Navbar.jsx";
 import Sidebar from "../components/Sidebar.jsx";
 
 function Home() {
+
+    useEffect = () => {
+
+    }
     return (
         <>
             <Sidebar />

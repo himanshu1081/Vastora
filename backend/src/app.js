@@ -24,7 +24,7 @@ import routerComment from "./routes/comment.routes.js";
 
 //routes
 app.use("/api/v1/user", routerUser);
-app.use("/api/v1/videos", routerVideo);
+app.use("/api/v1/video", routerVideo);
 app.use("/api/v1/like", routerLike);
 app.use("/api/v1/comment", routerComment);
 

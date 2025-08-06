@@ -31,7 +31,6 @@ const Navbar = () => {
         const user = res.data.data;
         if (user) {
           const { fullName, email, username, avatar } = user;
-          console.log(avatar)
           dispatch(login({ fullName, email, username, avatar }));
         }
       } catch (err) {

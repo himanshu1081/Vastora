@@ -2,17 +2,40 @@ import { useState } from "react";
 import { Navbar } from "../components/Navbar";
 import TextType from "../components/TextType";
 import Toggle from "../components/Toggle";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 //icons
 import { IoMdClose } from "react-icons/io";
 import { LiaCloudUploadAltSolid } from "react-icons/lia";
+import axiosInstance from "../util/axiosIntance";
 
 function Upload() {
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const formData = new FormData();
-        if (videoInfo.title === '') {
-            toast("Title can't be empty")
+        if (files.videoFile == null) {
+            toast.error("Upload video first")
             return;
+        }
+        if (letterCount.titleCount === 0) {
+            toast.error("Title can't be empty")
+            return;
+        }
+        formData.append("videoFile", files.videoFile)
+        if (files.thumbnail) formData.append("thumbnail", files.thumbnail)
+        formData.append("title", videoInfo.title)
+        formData.append("isPublished", videoInfo.isPublished)
+        if (videoInfo.description != "") formData.append("description", videoInfo.description)
+        const toastID = toast.loading('Uploading');
+        try {
+            const res = await axiosInstance.post("/video/upload", formData)
+            console.log(res)
+            toast.success('Video Uploaded Successfully!',{id:toastID});
+            useNavigate("/profile")
+        } catch (err) {
+            console.log("Message : ", err)
+            console.log(err.response?.data)
+            toast.error(err.response?.data?.message,{id:toastID})
         }
     }
 
@@ -70,32 +93,37 @@ function Upload() {
         video: null
     })
 
-    const [file, setFile] = useState({
+    const [files, setFiles] = useState({
         thumbnail: null,
-        video: null
+        videoFile: null
     })
 
-    const handleFile = (e, filename) => {
-        const files = e.target.files[0]
-        if (!files) return;
-        const previewUrl = URL.createObjectURL(files)
-        if (filename === "thumbnail") {
-            setFile(prev => ({ ...prev, filename: files }));
-            setPreview(prev => ({ ...prev, filename: previewUrl }))
-        } else if (filename === "video") {
-            setFile(prev => ({ ...prev, filename: files }));
-            setPreview(prev => ({ ...prev, filename: previewUrl }))
+    const handleFile = (e, filetype) => {
+        const file = e.target.files[0]
+        const filename = file.name.toLowerCase();
+        if (!file) return;
+        const previewUrl = URL.createObjectURL(file)
+        if (filetype === "thumbnail") {
+            if (file.type === "image/heic" || filename.endsWith(".heic")) {
+                toast.error("HEIC images are not supported. Please upload JPG/PNG.");
+                return;
+            }
+            setFiles(prev => ({ ...prev, thumbnail: file }));
+            setPreview(prev => ({ ...prev, thumbnail: previewUrl }))
+        } else if (filetype === "video") {
+            setFiles(prev => ({ ...prev, videoFile: file }));
+            setPreview(prev => ({ ...prev, video: previewUrl }))
         } else {
-            console.warn("Unknown filename key:", filename);
+            console.warn("Could not upload the file");
         }
     }
 
     return (
         <>
             <Navbar />
-            <div className="bg-black h-screen text-lg text-white w-screen font-figtree pt-15 pb-5 sm:pt-25 overflow-x-hidden hide-scrollbar flex justify-center items-center">
+            <div className="bg-black h-screen text-lg text-white w-screen font-figtree pt-15 pb-5 md:pb-2 sm:pt-25 sm:p-4 overflow-scroll hide-scrollbar flex justify-center items-center">
                 <div
-                    className="bg-[#8200db]/10 w-3/4 h-full border-2 border-white/30 flex flex-col rounded-lg  items-center p-2 gap-3 overflow-hidden">
+                    className="bg-[#8200db]/10 w-3/4 sm:w-4/4 md:w-3/4 h-full border-2 border-white/30 flex flex-col rounded-lg  items-center p-2 md:p-4 gap-3 sm:gap-4 overflow-scroll hide-scrollbar">
                     <div >
                         <TextType
                             text={["Upload your video", "Grow your channel", "Vast Aura"]}
@@ -103,21 +131,21 @@ function Upload() {
                             pauseDuration={1500}
                             showCursor={true}
                             cursorCharacter="_"
-                            className="font-extrabold"
+                            className="font-extrabold sm:text-5xl"
                         />
                     </div>
-                    <div className="h-fit w-full flex justify-center items-center flex-col text-base gap-2 ">
-                        <div className="max-w-[1280px] w-full h-fit flex justify-center">
+                    <div className="h-fit w-full flex justify-center items-center flex-col sm:flex-row text-base gap-2 sm:gap-4 ">
+                        <div className="max-w-[1280px] w-full md:w-3/4 h-fit flex justify-center">
                             {
                                 preview.video ?
                                     <div className="relative aspect-video">
                                         <IoMdClose className="top-1 right-1 absolute z-10"
                                             onClick={() => { setPreview(prev => ({ ...prev, video: null })) }} />
-                                        <video src={previewVideo} controls className="w-full h-full object-contain rounded-lg " />
+                                        <video src={preview.video} controls className="w-full h-full object-contain rounded-lg " />
                                     </div>
                                     :
                                     <label className="flex w-full h-fit justify-center items-center  rounded-lg">
-                                        <span className="rounded  bg-purple-500 flex p-2 w-4/4 justify-center items-center gap-2 font-bold">
+                                        <span className="rounded  bg-purple-500 flex p-2 w-4/4 md:w-3/4 lg:w-2/4 justify-center items-center gap-2 font-bold">
                                             <LiaCloudUploadAltSolid />
                                             Upload Video
                                         </span>
@@ -126,19 +154,17 @@ function Upload() {
                                         />
                                     </label>
                             }
-
-
                         </div>
-                        <div className="max-w-[1280px] w-full h-fit flex justify-center">
+                        <div className="max-w-[1280px] w-full  md:w-3/4 h-fit flex justify-center">
                             {
                                 preview.thumbnail ?
-                                    <div className="relative aspect-video">
+                                    <div className="relative w-full h-full aspect-video overflow-hidden">
                                         <IoMdClose className="top-1 right-1 absolute z-10"
                                             onClick={() => { setPreview(prev => ({ ...prev, thumbnail: null })) }} />
                                         <img src={preview.thumbnail} alt="Thumbnail" className="object-cover rounded-lg w-full h-full" />
                                     </div>
                                     :
-                                    <label className="flex justify-center items-center rounded-lg w-4/4 h-fit">
+                                    <label className="flex justify-center items-center rounded-lg w-4/4 md:w-3/4 lg:w-2/4 h-fit">
                                         <span className="rounded w-full bg-purple-500 flex p-2 justify-center items-center gap-2 font-bold">
                                             <LiaCloudUploadAltSolid />
                                             Upload Thumbnail
@@ -148,35 +174,33 @@ function Upload() {
                                         />
                                     </label>
                             }
-
-
                         </div>
                     </div>
-                    <div className="flex justify-center items-center gap-2 flex-col w-full">
-                        <div className="flex flex-col justify-center items-start w-full gap-1 relative">
+                    <div className="flex justify-center items-center gap-2 sm:gap-4 flex-col w-full">
+                        <div className="border-1 rounded flex flex-col justify-center items-start w-full gap-1 relative p-1 pb-5">
                             <span className="text-xs">Title</span>
                             <textarea
                                 type="text"
                                 name="title"
-                                placeholder="Title"
+                                placeholder="Title of your video"
                                 value={videoInfo.title}
                                 maxLength={limit.titleLimit}
                                 onChange={handleVideoInfo}
-                                className="border-1 rounded focus:outline-none p-1 w-full h-fit text-base overflow-hidden"
+                                className="focus:outline-none w-full h-fit text-base overflow-hidden hide-scrollbar"
                             />
                             <span
                                 className="absolute z-2 text-xs bottom-1 right-1"
                             >{letterCount.titleCount}/{limit.titleLimit}</span>
                         </div>
-                        <div className="flex flex-col justify-center items-start w-full gap-1 relative">
+                        <div className="border-1 rounded flex flex-col justify-center items-start w-full gap-1 relative p-1 pb-5">
                             <span className="text-xs">Description</span>
                             <textarea
                                 name="description"
                                 value={videoInfo.description}
-                                placeholder="Description"
+                                placeholder="Description your video"
                                 onChange={handleVideoInfo}
                                 maxLength={limit.descriptionLimit}
-                                className="border-1 rounded focus:outline-none p-1 relative w-4/4 h-50 text-base"
+                                className="focus:outline-none p-1 relative w-4/4 h-50 text-base hide-scrollbar"
                             />
                             <span
                                 className="absolute z-2 text-xs bottom-1 right-1"
@@ -189,12 +213,11 @@ function Upload() {
                         </div>
                     </div>
                     <div
-                        className="bg-purple-500 w-2/4 h-1/4 rounded-md flex justify-center items-center"
+                        className="transition-all duration-100 ease-in bg-purple-500 w-30 h-fit rounded-md flex justify-center items-center p-2 font-extrabold hover:bg-purple-700 cursor-pointer"
                         onClick={handleSubmit}
                     >
-                        Submit
+                        Post
                     </div>
-
                 </div>
             </div>
         </>

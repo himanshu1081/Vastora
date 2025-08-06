@@ -8,6 +8,7 @@ const Toggle = ({ color='gray', size,onToggle}) => {
         height:size,
         width:size*2
     }
+    
 const handleChange=()=>{
     const newState = !isToggled;
     setIsToggled(newState);

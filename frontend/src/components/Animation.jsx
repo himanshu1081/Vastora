@@ -2,7 +2,7 @@ import { Navbar } from "./Navbar";
 import Sidebar from "./Sidebar";
 import { motion } from "motion/react"
 
-function Animation({ size, elements }) {
+function Animation({ size=8, elements=40 }) {
     var animation = [];
     for (var i = 0; i < elements; i++) {
         var xValues = []

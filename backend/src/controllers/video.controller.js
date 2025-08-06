@@ -11,7 +11,8 @@ import doExist from "../utils/doExist.js";
 import mongoose from "mongoose";
 
 const videoUpload = asyncHandler(async (req, res) => {
-    const { title, description } = req.body;
+    console.log("hello")
+    const { title, description, isPublished } = req.body;
     const { _id } = req.user;
     if (!_id) {
         throw new ApiError(400, "User not logged in!");
@@ -39,6 +40,7 @@ const videoUpload = asyncHandler(async (req, res) => {
         title,
         description: description || "",
         duration,
+        isPublished,
         vPublicId: videoFile.public_id,
         tPublicId: thumbnail.public_id
     })
