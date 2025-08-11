@@ -23,8 +23,8 @@ function Watch() {
         const watchVideo = async () => {
             try {
                 const res1 = await axiosInstance.get(`video/watch/${videoId}`)
-                setWatch(res1.data?.data);
-                console.log(res1.data?.data);
+                setWatch(res1.data?.data[0]);
+                console.log(res1.data?.data[0]);
                 const res2 = await axiosInstance.get("/video");
                 setVideos(res2?.data?.data);
                 scrollRef.current.scrollTo({ top: 0, behavior: 'smooth' });
@@ -69,7 +69,7 @@ function Watch() {
                                             src={watch.videoFile}
                                             controls
                                             autoPlay
-                                            className="w-full h-11/12 object-contain rounded-xl border-1 border-white/20 bg-black "
+                                            className="w-full  h-12/12 object-contain rounded-xl border-1 border-white/20 bg-black "
                                         />
                                     </div>
                                     <div className="p-3 bg-[#0b0b0b] relative flex flex-col justify-start items-start gap-1 rounded-lg " onClick={() => setDescriptionExpand(!descriptionExpand)}>

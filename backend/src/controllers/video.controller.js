@@ -32,8 +32,8 @@ const videoUpload = asyncHandler(async (req, res) => {
     if (thumbnailPath) {
         thumbnail = await uploadOnCloudinary(thumbnailPath);
         if (!thumbnail) {
-        console.warn("Thumbnail upload failed");
-    }
+            console.warn("Thumbnail upload failed");
+        }
     }
     if (!videoFile) {
         throw new ApiError(404, "Video could not be uploaded");
@@ -157,11 +157,45 @@ const watchVideo = asyncHandler(async (req, res) => {
     if (!videoId) {
         return res.redirect("/");
     }
-    const video = await Video.findByIdAndUpdate(videoId, { $inc: { views: 1 } }).select('-vPublicId -tPublicId -isPublished');
+    await Video.findByIdAndUpdate(videoId, { $inc: { views: 1 } }).select('-vPublicId -tPublicId -isPublished');
+    const video = await Video.aggregate([
+        {
+            $match: {
+                isPublished: true,
+                _id: new mongoose.Types.ObjectId(videoId)
+            }
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "owner",
+                foreignField: "_id",
+                as: "owner"
+            }
+        },
+        {
+            $unwind: {
+                path: "$owner",
+                preserveNullAndEmptyArrays: true
+            }
+        }, {
+            $project: {
+                title: 1,
+                videoFile:1,
+                thumbnail: 1,
+                duration: 1,
+                views: 1,
+                createdAt: 1,
+                ownerId: "$owner._id",
+                ownerName: "$owner.fullName",
+                ownerAvatar: "$owner.avatar"
+            }
+        }
+    ]);
     const videoObjectId = new mongoose.Types.ObjectId(videoId);
     const user = req?.user;
-    if(!user){
-        res.status(200).json(new ApiResponse(200,video,"View Counted"))
+    if (!user) {
+        res.status(200).json(new ApiResponse(200, video, "View Counted"))
     }
     if (user) {
         await User.findByIdAndUpdate(user._id, {

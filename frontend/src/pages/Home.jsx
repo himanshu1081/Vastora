@@ -15,7 +15,7 @@ function Home() {
     useEffect(() => {
         const fetchVideos = async () => {
             try {
-                const res = await axiosInstance.get("/video",{params : {limit:12}});
+                const res = await axiosInstance.get("/video");
                 setVideos(res?.data?.data);
             } catch (err) {
                 console.error(err.response?.data?.message);
