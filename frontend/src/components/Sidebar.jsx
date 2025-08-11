@@ -32,7 +32,7 @@ function Sidebar() {
         <>
             {sidebar && <span className="h-screen w-screen bg-black/20 fixed z-40 md:hidden"></span>}
 
-            <div className="fixed z-50 md:z-30 h-screen ">
+            <div className="fixed z-50 md:z-30 h-screen left-0 top-0">
                 <div
                     className={`transition-all duration-300 ease-in-out flex flex-col items-center  h-full bg-black font-vcr
                     ${sidebar ? "md:w-64 w-44" : "md:w-16 w-0"}`}

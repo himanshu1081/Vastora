@@ -28,12 +28,15 @@ const registerUser = asyncHandler(async (req, res) => {
     let avatar = null;
     let coverImage = null;
     if (avatarLocalPath) {
-        let url = await uploadOnCloudinary(avatarLocalPath); 
-        avatar = url.replace("/upload/", "/upload/f_auto/")
+        let result = await uploadOnCloudinary(avatarLocalPath);
+        avatar = result?.url?.replace("/upload/", "/upload/f_auto/")
+        if (!avatar) {
+            throw new ApiError(500, "Avatar upload failed!");
+        }
     }
     if (coverImageLocalPath) {
-        let url = await uploadOnCloudinary(overImageLocalPath); 
-        coverImage = url.replace("/upload/","/upload/f_auto");
+        let result = await uploadOnCloudinary(coverImageLocalPath);
+        coverImage = result?.url?.replace("/upload/", "/upload/f_auto");
     }
 
 
@@ -42,8 +45,8 @@ const registerUser = asyncHandler(async (req, res) => {
         username: username.toLowerCase(),
         password,
         fullName,
-        avatar: avatar?.url || "",
-        coverImage: coverImage?.url || ""
+        avatar,
+        coverImage: coverImage || ""
     });
 
     const createdUser = await User.findById(user._id).select("-password -refreshToken");

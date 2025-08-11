@@ -10,7 +10,7 @@ import { LiaCloudUploadAltSolid } from "react-icons/lia";
 import axiosInstance from "../util/axiosIntance";
 
 function Upload() {
-
+const navigate = useNavigate();
     const handleSubmit = async () => {
         const formData = new FormData();
         if (files.videoFile == null) {
@@ -28,10 +28,9 @@ function Upload() {
         if (videoInfo.description != "") formData.append("description", videoInfo.description)
         const toastID = toast.loading('Uploading');
         try {
-            const res = await axiosInstance.post("/video/upload", formData)
-            console.log(res)
+            await axiosInstance.post("/video/upload", formData)
             toast.success('Video Uploaded Successfully!',{id:toastID});
-            useNavigate("/profile")
+            navigate("/profile")
         } catch (err) {
             console.log("Message : ", err)
             console.log(err.response?.data)

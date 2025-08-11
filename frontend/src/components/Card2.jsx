@@ -1,4 +1,4 @@
-const Card = ({ channelName, avatar, title, viewCount, thumbnail, date,onClick }) => {
+const Card2 = ({ channelName, avatar, title, viewCount, thumbnail, onClick }) => {
 
 
     const views = () => {
@@ -18,7 +18,7 @@ const Card = ({ channelName, avatar, title, viewCount, thumbnail, date,onClick }
     return (
         <>
             <div onClick={onClick}
-                className="transition-all duration-100 ease-in md:h-4/4 w-75 sm:w-full md:w-full border-2 border-white/20 backdrop-blur-2xl bg-[#0b0b0b] text-white rounded-2xl p-2 scale-100 hover:scale-103 hover:bg-[#8200db]/10 cursor-pointer">
+                className="transition-all duration-100 ease-in w-full border-2 border-white/20 backdrop-blur-2xl bg-[#0b0b0b] text-white rounded-2xl p-2 scale-100 hover:scale-103 hover:bg-[#8200db]/10 cursor-pointer">
                 <div className="aspect-video w-full rounded-lg overflow-hidden border-2 border-black/20 backdrop-blur-2xl ">
                     <img src={thumbnail} alt="thumbnail"
                         className="rounded-lg object-contain"
@@ -32,19 +32,16 @@ const Card = ({ channelName, avatar, title, viewCount, thumbnail, date,onClick }
                         />
                     </div>
                     <div
-                        className="flex flex-col justify-start items-baseline  
-                        w-full h-fit gap-1 min-w-0 text-xs md:text-sm text-gray-400">
-                        <div
-                            className="w-full line-clamp-1 md:line-clamp-2 text-base text-white">
+                        className="flex flex-col justify-start items-baseline text-base 
+                        w-full h-13 md:h-17 min-w-0">
+                        <span
+                            className="w-full line-clamp-1 md:line-clamp-2">
                             {title}
-                        </div>
-                        <span className="w-full line-clamp-1 ">{channelName}</span>
+                        </span>
                         <div
-                        className="flex justify-between items-center w-full ">
-                            <span className="">{views()} views</span>
-                            {date}
-                        </div>
-                        <div>
+                            className="flex justify-between items-center w-full text-sm text-gray-400">
+                            <span className="w-full line-clamp-1 ">{channelName}</span>
+                            <span className="">{views()}</span>
                         </div>
                     </div>
                 </div>
@@ -53,4 +50,4 @@ const Card = ({ channelName, avatar, title, viewCount, thumbnail, date,onClick }
     )
 }
 
-export default Card
+export default Card2

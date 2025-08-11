@@ -8,6 +8,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Navbar } from "./components/Navbar";
 import Upload from "./pages/Upload.jsx";
 import { Toaster } from 'react-hot-toast';
+import 'video.js/dist/video-js.css'
+
 
 
 const router = createBrowserRouter([
@@ -34,7 +36,7 @@ const router = createBrowserRouter([
       <Profile />
   },
   {
-    path: "/watch",
+    path: "/watch/:videoId",
     element:
       <Watch />
   },

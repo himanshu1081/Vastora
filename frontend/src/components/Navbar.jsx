@@ -56,6 +56,7 @@ const Navbar = () => {
     try {
       await axiosInstance.post("/user/logout", {}, { withCredentials: true });
       dispatch(logout());
+      window.location.reload()
     } catch (err) {
       console.log("Error: ", err);
     }
@@ -115,7 +116,7 @@ const Navbar = () => {
   return (
     <div
       className={`fixed left-0 top-0 ${sidebar ? "z-25" : "z-50"
-        } bg-black text-white flex items-center justify-around sm:justify-between 
+        } bg-black text-white flex items-center justify-between sm:justify-between 
         w-full h-10 sm:h-20 font-figtree md:px-12 `}
     >
       <div className="flex justify-around items-center ">
@@ -127,7 +128,7 @@ const Navbar = () => {
         </div>
         <NavLink
           to="/"
-          className="font-vcr font-bold text-xl sm:text-3xl md:text-4xl px-2"
+          className="font-vcr font-bold text-lg sm:text-3xl md:text-4xl px-2"
         >
           VASTORA
         </NavLink>

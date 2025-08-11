@@ -4,6 +4,7 @@ import Stepper, { Step } from '../components/Stepper.jsx';
 import BlurText from "../components/BlurTexts.jsx";
 import axiosInstance from "../util/axiosIntance.js"
 import { useNavigate } from "react-router-dom";
+import { LiaCloudUploadAltSolid } from "react-icons/lia";
 
 function Register() {
 
@@ -64,7 +65,7 @@ function Register() {
         try {
             const res = await axiosInstance.post("/user/register", formData)
             console.log(res)
-            
+
             navigate("/login")
         } catch (err) {
             console.log("Message : ", err)
@@ -115,26 +116,39 @@ function Register() {
                     </Step>
                     <Step>
                         <div className="flex justify-center items-center flex-col">
-                            <h3>Upload Avatar</h3>
-                            <input type="file" accept="image/*" onChange={(e) => handleImage(e, "avatar")}
-                                className="bg-white/20 p-1 rounded w-3/4" />
+                            <label className="flex w-full h-fit justify-center items-center  rounded-lg">
+                                <span className="rounded transition-all duration-100 ease-in bg-white/20 flex p-3 w-4/4 justify-center items-center gap-2 font-bold cursor-pointer hover:bg-purple-500 hover:scale-105">
+                                    <LiaCloudUploadAltSolid />
+                                    Upload Avatar
+                                </span>
+                                <input type="file" accept="image/*" onChange={(e) => handleImage(e, "avatar")}
+                                    className="hidden"
+                                />
+                            </label>
 
                             {avatar &&
                                 <img src={URL.createObjectURL(avatar)}
                                     style={{ width: "200px", marginTop: "10px" }}
-                                    className="max-w-xs rounded-md shadow-lg"
+                                    className="max-w-xs rounded-md shadow-lg h-fit"
                                 />
                             }
                         </div>
                     </Step>
                     <Step>
                         <div className="flex justify-center items-center flex-col">
-                            <h3>Upload Cover Image (optional)</h3>
-                            <input type="file" accept="image/*" onChange={(e) => handleImage(e, "coverImage")}
-                                className="bg-white/20 p-1 rounded w-3/4" />
+                            <label className="flex w-full h-fit justify-center items-center  rounded-lg">
+                                <span className="rounded transition-all duration-100 ease-in bg-white/20 flex p-3 w-4/4 justify-center items-center gap-2 font-bold cursor-pointer hover:bg-purple-500 hover:scale-105">
+                                    <LiaCloudUploadAltSolid />
+                                    Upload Cover
+                                </span>
+                                <input type="file" accept="image/*" onChange={(e) => handleImage(e, "coverImage")}
+                                    className="hidden"
+                                />
+                            </label>
+
                             {coverImage &&
                                 <div>
-                                    <img src={URL.createObjectURL(coverImage)} style={{ width: "200px", marginTop: "10px" }} className="max-w-xs rounded-md shadow-lg" />
+                                    <img src={URL.createObjectURL(coverImage)} style={{ width: "200px", marginTop: "10px" }} className="max-w-xs rounded-md shadow-lg h-fit" />
                                 </div>}
                         </div>
                     </Step>

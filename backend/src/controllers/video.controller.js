@@ -11,12 +11,13 @@ import doExist from "../utils/doExist.js";
 import mongoose from "mongoose";
 
 const videoUpload = asyncHandler(async (req, res) => {
-    console.log("hello")
     const { title, description, isPublished } = req.body;
     const { _id } = req.user;
     if (!_id) {
         throw new ApiError(400, "User not logged in!");
     }
+    console.log("FILES RECEIVED:", req.files);
+
     const videoPath = req.files?.videoFile?.[0]?.path;
 
     const thumbnailPath = req.files?.thumbnail?.[0]?.path;
@@ -26,14 +27,18 @@ const videoUpload = asyncHandler(async (req, res) => {
     }
     const duration = info.streams[0].duration / 60;
     const videoFile = await uploadOnCloudinary(videoPath);
-    let thumbnail = null;
+    let thumbnail;
+    console.log(thumbnailPath)
     if (thumbnailPath) {
         thumbnail = await uploadOnCloudinary(thumbnailPath);
+        if (!thumbnail) {
+        console.warn("Thumbnail upload failed");
+    }
     }
     if (!videoFile) {
-        throw new ApiError(404, "File not found");
+        throw new ApiError(404, "Video could not be uploaded");
     }
-    const videoDetails = Video.create({
+    const videoDetails = await Video.create({
         videoFile: videoFile?.secure_url,
         thumbnail: thumbnail?.secure_url || "",
         owner: _id,
@@ -41,8 +46,8 @@ const videoUpload = asyncHandler(async (req, res) => {
         description: description || "",
         duration,
         isPublished,
-        vPublicId: videoFile.public_id,
-        tPublicId: thumbnail.public_id
+        vPublicId: videoFile?.public_id,
+        tPublicId: thumbnail?.public_id
     })
     res.status(200).json(new ApiResponse(200, videoDetails, "Video uploaded successfully"));
 });
@@ -54,7 +59,7 @@ const publishedToggle = asyncHandler(async (req, res) => {
 });
 
 const getVideos = asyncHandler(async (req, res) => {
-    const limit = parseInt(req.query.limit) || 10;
+    let limit = parseInt(req.query.limit) || 10;
     if (limit > 50) {
         limit = 50
     } else if (limit < 1) {
@@ -66,6 +71,33 @@ const getVideos = asyncHandler(async (req, res) => {
         },
         {
             $sample: { size: limit }
+        }
+        ,
+        {
+            $lookup: {
+                from: "users",
+                localField: "owner",
+                foreignField: "_id",
+                as: "owner"
+            }
+        },
+        {
+            $unwind: {
+                path: "$owner",
+                preserveNullAndEmptyArrays: true
+            }
+        }, {
+            $project: {
+                _id: 1,
+                title: 1,
+                thumbnail: 1,
+                duration: 1,
+                views: 1,
+                createdAt: 1,
+                ownerId: "$owner._id",
+                ownerName: "$owner.fullName",
+                ownerAvatar: "$owner.avatar"
+            }
         }
     ]);
     res.status(200).json(new ApiResponse(200, videos, "Videos fetched"));
@@ -125,9 +157,12 @@ const watchVideo = asyncHandler(async (req, res) => {
     if (!videoId) {
         return res.redirect("/");
     }
-    const video = await Video.findByIdAndUpdate(videoId, { $inc: { views: 1 } }).select('title description duration views thumbnail videoFile');
+    const video = await Video.findByIdAndUpdate(videoId, { $inc: { views: 1 } }).select('-vPublicId -tPublicId -isPublished');
     const videoObjectId = new mongoose.Types.ObjectId(videoId);
-    const user = req.user;
+    const user = req?.user;
+    if(!user){
+        res.status(200).json(new ApiResponse(200,video,"View Counted"))
+    }
     if (user) {
         await User.findByIdAndUpdate(user._id, {
             $push: {
