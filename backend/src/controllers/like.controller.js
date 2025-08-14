@@ -10,7 +10,7 @@ const likeVideoToggle = asyncHandler(async (req, res) => {
     const userId = req.user._id;
     const videoId = req.params.videoId;
     doExist(videoId);
-    let { type } = req.body;
+    let { type } = req.query;
     type = type.toLowerCase();
     const existing = await Likes.findOne({ video: videoId, toggledBy: userId })
 

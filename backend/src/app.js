@@ -21,12 +21,15 @@ import routerUser from "./routes/user.routes.js";
 import routerVideo from "./routes/video.routes.js";
 import routerLike from "./routes/likes.routes.js";
 import routerComment from "./routes/comment.routes.js";
+import routerSubscriber from "./routes/subscriber.routes.js";
 
 //routes
 app.use("/api/v1/user", routerUser);
 app.use("/api/v1/video", routerVideo);
 app.use("/api/v1/like", routerLike);
 app.use("/api/v1/comment", routerComment);
+app.use("/api/v1/subscriber", routerSubscriber);
+
 
 // global error handler
 app.use((err, req, res, next) => {

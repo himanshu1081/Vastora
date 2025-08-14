@@ -181,13 +181,15 @@ const watchVideo = asyncHandler(async (req, res) => {
         }, {
             $project: {
                 title: 1,
-                videoFile:1,
+                videoFile: 1,
+                description: 1,
                 thumbnail: 1,
                 duration: 1,
                 views: 1,
                 createdAt: 1,
                 ownerId: "$owner._id",
                 ownerName: "$owner.fullName",
+                ownerUsername : "$owner.username",
                 ownerAvatar: "$owner.avatar"
             }
         }
@@ -196,6 +198,7 @@ const watchVideo = asyncHandler(async (req, res) => {
     const user = req?.user;
     if (!user) {
         res.status(200).json(new ApiResponse(200, video, "View Counted"))
+        return
     }
     if (user) {
         await User.findByIdAndUpdate(user._id, {
