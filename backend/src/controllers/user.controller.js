@@ -36,7 +36,7 @@ const registerUser = asyncHandler(async (req, res) => {
     }
     if (coverImageLocalPath) {
         let result = await uploadOnCloudinary(coverImageLocalPath);
-        coverImage = result?.url?.replace("/upload/", "/upload/f_auto");
+        coverImage = result?.url?.replace("/upload/", "/upload/f_auto/");
     }
 
 
@@ -212,11 +212,12 @@ const updateCoverImage = asyncHandler(async (req, res) => {
 
 const getUserChannelProfile = asyncHandler(async (req, res) => {
     const { username } = req.params;
+    const { id } = req?.user || {};
     if (!username?.trim()) {
         throw new ApiError(400, "No user found");
     }
     var ownProfile;
-    if (req.user.username == username) {
+    if (req.user?.username == username) {
         ownProfile = true;
     } else {
         ownProfile = false;
@@ -235,12 +236,27 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
                 foreignField: "channel",
                 as: "subscribers"
             }
-        }, {
+        },
+        {
             $lookup: {
                 from: "subscriptions",
                 localField: "_id",
                 foreignField: "subscriber",
                 as: "subscribedTo"
+            }
+        },
+        {
+            $lookup: {
+                from: "videos",
+                let: { userId: "$_id" },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: { $eq: ["$owner", "$$userId"] }
+                        }
+                    }
+                ],
+                as: "videos"
             }
         }, {
             $addFields: {
@@ -250,13 +266,13 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
                 subcribedCount: {
                     $size: "$subscribedTo"
                 },
-                isSubscribered: {
+                isSubscribed: id ? {
                     $cond: {
                         if: { $in: [req.user._id, "$subscribers.subscriber"] },
                         then: true,
                         else: false
                     }
-                }
+                } : false
             }
         }, {
             $project: {
@@ -264,15 +280,22 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
                 username: 1,
                 subscriberCount: 1,
                 subcribedCount: 1,
-                isSubscribered: 1,
-                avatarImage: 1,
+                isSubscribed: 1,
+                avatar: 1,
                 coverImage: 1,
-                email: 1
+                email: 1,
+                createdAt: 1,
+                videos: 1
             }
         }
     ])
     if (!channel?.length) {
         throw new ApiError(404, "No channel Exists");
+    }
+    if (!ownProfile) {
+        const videos = channel[0]?.videos?.filter(v => v.isPublished === true);
+        return res.status(200).json(new ApiResponse(200, { ...channel[0], ownProfile, videos }, "Channel Fetched"));
+
     }
     res.status(200).json(new ApiResponse(200, { ...channel[0], ownProfile }, "Channel Fetched"));
 });

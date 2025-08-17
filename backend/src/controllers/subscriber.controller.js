@@ -3,21 +3,17 @@ import ApiError from "../utils/ApiError.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import mongoose, { Mongoose } from "mongoose";
+import doExist from "../utils/doExist.js";
 
 
 const getChannelSubscribers = asyncHandler(async (req, res) => {
-    const { channelId } = req.params;
+    const { videoId } = req.params;
     const { _id } = req.user || {};
-    if (!channelId) {
-        throw new ApiError(404, "No channel found");
-    }
-    if (!mongoose.Types.ObjectId.isValid(channelId)) {
-        throw new ApiError(400, "Invalid channel ID");
-    }
+    const videoInfo = await doExist(videoId);
     const subscribers = await Subscription.aggregate([
         {
             $match: {
-                channel: new mongoose.Types.ObjectId(channelId)
+                channel: new mongoose.Types.ObjectId(videoInfo.owner)
             }
         }, {
             $count: "subscribersCount"
@@ -25,7 +21,7 @@ const getChannelSubscribers = asyncHandler(async (req, res) => {
     ])
     let isSubscribed = false;
     if (_id) {
-        isSubscribed = !!(await Subscription.exists({ subscriber: _id, channel: new mongoose.Types.ObjectId(channelId) }))
+        isSubscribed = !!(await Subscription.exists({ subscriber: _id, channel: new mongoose.Types.ObjectId(videoInfo.owner) }))
     }
     const count = subscribers.length > 0 ? subscribers[0].subscribersCount : 0
     res.status(200).json(new ApiResponse(200, { count, isSubscribed }, "Subscribers Fetched"));
@@ -65,3 +61,18 @@ const unsubscribeChannel = asyncHandler(async (req, res) => {
 });
 
 export { getChannelSubscribers, subscribeChannel, unsubscribeChannel }
+
+// ,
+//         {
+//             $facet:{
+//                 isSubscribed:_id?[
+//                     {
+//                         $match:{
+//                             subscriber:new mongoose.Types.ObjectId(_id),channel:new mongoose.Types.ObjectId(channelId)
+//                         }
+//                     },{
+//                          $count: "subscribersCount"
+//                     }
+//                 ]:[]
+//             }
+//         }

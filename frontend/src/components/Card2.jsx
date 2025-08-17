@@ -1,4 +1,4 @@
-const Card2 = ({ channelName, avatar, title, viewCount, thumbnail, onClick }) => {
+const Card2 = ({ channelName, avatar, title, viewCount, thumbnail, onClick ,date }) => {
 
 
     const views = () => {
@@ -38,10 +38,10 @@ const Card2 = ({ channelName, avatar, title, viewCount, thumbnail, onClick }) =>
                             className="w-full line-clamp-1 md:line-clamp-2">
                             {title}
                         </span>
-                        <div
-                            className="flex justify-between items-center w-full text-sm text-gray-400">
-                            <span className="w-full line-clamp-1 ">{channelName}</span>
-                            <span className="">{views()}</span>
+                         <div
+                            className="flex justify-between items-center w-full ">
+                            <span className="">{views()} views</span>
+                            {date}
                         </div>
                     </div>
                 </div>

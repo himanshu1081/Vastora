@@ -3,8 +3,8 @@ import { useState, useMemo } from "react";
 import Animation from "../components/Animation.jsx";
 import { NavLink, useNavigate } from "react-router-dom"
 import axiosInstance from "../util/axiosIntance.js";
-import { login,} from "../features/authSlice.js";
-import { useDispatch} from "react-redux";
+import { login, } from "../features/authSlice.js";
+import { useDispatch } from "react-redux";
 
 function Login() {
     const naviagte = useNavigate();
@@ -20,9 +20,9 @@ function Login() {
         identifier: "",
         password: ""
     });
-    
-    const handleKey=(e)=>{
-        if(e.key=='Enter'){
+
+    const handleKey = (e) => {
+        if (e.key == 'Enter') {
             handleLogIn()
         }
     }
@@ -45,10 +45,10 @@ function Login() {
                     password: form.password
                 }
             )
-            console.log(res);
-            const { fullName, username, avatar, coverImage, email } = res?.data?.data?.userData;
+            
+            const { _id, fullName, username, avatar, coverImage, email } = res?.data?.data?.userData;
             dispatch(login(
-                { fullName, username, avatar, coverImage, email }
+                { _id, fullName, username, avatar, coverImage, email }
             ))
             naviagte("/")
         }
@@ -106,7 +106,7 @@ function Login() {
                     <span
                         className="transition-all duration-200 ease-in-out bg-purple-700 rounded p-2 w-full flex justify-center items-center font-bold shadow-sm shadow-black/30 md:bg-purple-500 md:hover:bg-purple-700 hover:cursor-pointer"
                         onClick={handleLogIn}
-                        
+
                     >
                         Log in
                     </span>

@@ -17,7 +17,7 @@ const likes = mongoose.Schema({
         type: String,
         trim: true,
         lowercase: true,
-        enum: ["like", "dislike", "neutral"]
+        enum: ["like", "dislike"]
     }
 }, { timestamps: true });
 

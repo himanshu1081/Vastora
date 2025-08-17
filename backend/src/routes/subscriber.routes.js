@@ -5,7 +5,7 @@ import { optionalAuth } from "../middlewares/optionalAuth.middleware.js";
 
 const routerSubscriber = Router();
 
-routerSubscriber.route("/:channelId").get(optionalAuth, getChannelSubscribers);
+routerSubscriber.route("/:videoId").get(optionalAuth, getChannelSubscribers);
 routerSubscriber.route("/subscribe/:channelId").post(verifyJWT, subscribeChannel);
 routerSubscriber.route("/unsubscribe/:channelId").delete(verifyJWT, unsubscribeChannel);
 

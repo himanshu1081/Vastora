@@ -5,7 +5,6 @@ import Login from "./pages/Login.jsx";
 import Home from "./pages/Home.jsx";
 import History from "./pages/History.jsx";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { Navbar } from "./components/Navbar";
 import Upload from "./pages/Upload.jsx";
 import { Toaster } from 'react-hot-toast';
 import 'video.js/dist/video-js.css'
@@ -31,7 +30,7 @@ const router = createBrowserRouter([
       <Login />
   },
   {
-    path: "/profile",
+    path: "/profile/:username",
     element:
       <Profile />
   },

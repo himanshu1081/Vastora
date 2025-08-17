@@ -14,9 +14,6 @@ const likeVideoToggle = asyncHandler(async (req, res) => {
     type = type.toLowerCase();
     const existing = await Likes.findOne({ video: videoId, toggledBy: userId })
 
-    if (existing?.likeToggle == type) {
-        return res.status(200).json(new ApiResponse(200, null, type));
-    }
 
     if (type == "like" || type == "dislike") {
         if (!existing) {
@@ -43,7 +40,7 @@ const likeVideoToggle = asyncHandler(async (req, res) => {
 const likeCommentToggle = asyncHandler(async (req, res) => {
     const userId = req.user._id;
     const commentId = req.params.commentId;
-    let { type } = req.body;
+    let { type } = req?.query;
     type = type.toLowerCase();
     const comment = await Comment.findById(commentId);
     if (!comment) {
@@ -79,9 +76,14 @@ const likeCommentToggle = asyncHandler(async (req, res) => {
 
 const getVideoLikes = asyncHandler(async (req, res) => {
     const videoId = req.params.videoId;
-    doExist(videoId);
+    const { _id } = req.user || {};
+    await doExist(videoId);
     const data = await Likes.aggregate([
-        { $match: { video: new mongoose.Types.ObjectId(videoId) } },
+        {
+            $match: {
+                video: new mongoose.Types.ObjectId(videoId)
+            }
+        },
         {
             $lookup: {
                 from: "users",
@@ -126,7 +128,20 @@ const getVideoLikes = asyncHandler(async (req, res) => {
                         $project: {
                             owner: 1,
                         }
-                    }]
+                    }
+                ],
+                impression: _id ? [
+                    {
+                        $match: {
+                            toggledBy: new mongoose.Types.ObjectId(_id)
+                        }
+                    },
+                    {
+                        $project: {
+                            likeToggle: 1, _id: 0
+                        }
+                    }
+                ] : []
             }
         }
     ])
@@ -136,8 +151,19 @@ const getVideoLikes = asyncHandler(async (req, res) => {
     const likes = data[0]?.totalLikes[0]?.totalLikes || 0;
     const dislikes = data[0]?.totalDislikes[0]?.totalDislikes || 0;
     const owner = data[0]?.owner.map(o => o.owner).flat() || [];
+    let isLiked = false;
+    let isDisliked = false;
+    if (_id) {
+        const impression = data[0]?.impression[0]?.likeToggle
+        if (impression == "like") {
+            isLiked = true;
+        } else if (impression == "dislike") {
+            isDisliked = true;
+        }
 
-    const response = { likes, dislikes, owner }
+    }
+
+    const response = { likes, dislikes, owner, isLiked, isDisliked }
 
     res.status(200).json(new ApiResponse(200, response, "Data fetched"))
 });
@@ -145,12 +171,17 @@ const getVideoLikes = asyncHandler(async (req, res) => {
 const getCommentLikes = asyncHandler(async (req, res) => {
     const commentId = req.params.commentId;
     const comment = Comment.findById(commentId);
+    const { _id } = req.user || {};
     if (!comment) {
         throw new ApiError(400, "No comment exist");
     }
 
     const data = await Likes.aggregate([
-        { $match: { comment: new mongoose.Types.ObjectId(commentId) } },
+        {
+            $match: {
+                comment: new mongoose.Types.ObjectId(commentId)
+            }
+        },
         {
             $lookup: {
                 from: "users",
@@ -195,7 +226,20 @@ const getCommentLikes = asyncHandler(async (req, res) => {
                         $project: {
                             owner: 1,
                         }
-                    }]
+                    }
+                ],
+                impression: _id ? [
+                    {
+                        $match: {
+                            toggledBy: new mongoose.Types.ObjectId(_id)
+                        }
+                    },
+                    {
+                        $project: {
+                            likeToggle: 1, _id: 0
+                        }
+                    }
+                ] : []
             }
         }
     ])
@@ -205,8 +249,18 @@ const getCommentLikes = asyncHandler(async (req, res) => {
     const likes = data[0]?.totalLikes[0]?.totalLikes || 0;
     const dislikes = data[0]?.totalDislikes[0]?.totalDislikes || 0;
     const owner = data[0]?.owner.map(o => o.owner).flat() || [];
+    let isLiked = false;
+    let isDisliked = false;
+    if (_id) {
+        const impression = data[0]?.impression[0]?.likeToggle
+        if (impression == "like") {
+            isLiked = true;
+        } else if (impression == "dislike") {
+            isDisliked = true;
+        }
 
-    const response = { likes, dislikes, owner }
+    }
+    const response = { likes, dislikes, owner, isLiked, isDisliked }
 
     res.status(200).json(new ApiResponse(200, response, "Data fetched"))
 });

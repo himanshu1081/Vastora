@@ -10,7 +10,7 @@ import { LiaCloudUploadAltSolid } from "react-icons/lia";
 import axiosInstance from "../util/axiosIntance";
 
 function Upload() {
-const navigate = useNavigate();
+    const navigate = useNavigate();
     const handleSubmit = async () => {
         const formData = new FormData();
         if (files.videoFile == null) {
@@ -29,12 +29,12 @@ const navigate = useNavigate();
         const toastID = toast.loading('Uploading');
         try {
             await axiosInstance.post("/video/upload", formData)
-            toast.success('Video Uploaded Successfully!',{id:toastID});
+            toast.success('Video Uploaded Successfully!', { id: toastID });
             navigate("/profile")
         } catch (err) {
             console.log("Message : ", err)
             console.log(err.response?.data)
-            toast.error(err.response?.data?.message,{id:toastID})
+            toast.error(err.response?.data?.message, { id: toastID })
         }
     }
 
@@ -180,12 +180,13 @@ const navigate = useNavigate();
                             <span className="text-xs">Title</span>
                             <textarea
                                 type="text"
+                                wrap="hard"
                                 name="title"
                                 placeholder="Title of your video"
                                 value={videoInfo.title}
                                 maxLength={limit.titleLimit}
                                 onChange={handleVideoInfo}
-                                className="focus:outline-none w-full h-fit text-base overflow-hidden hide-scrollbar"
+                                className="focus:outline-none w-full h-fit text-base overflow-hidden hide-scrollbar resize-none"
                             />
                             <span
                                 className="absolute z-2 text-xs bottom-1 right-1"
@@ -195,11 +196,12 @@ const navigate = useNavigate();
                             <span className="text-xs">Description</span>
                             <textarea
                                 name="description"
+                                wrap="hard"
                                 value={videoInfo.description}
                                 placeholder="Description your video"
                                 onChange={handleVideoInfo}
                                 maxLength={limit.descriptionLimit}
-                                className="focus:outline-none p-1 relative w-4/4 h-50 text-base hide-scrollbar"
+                                className="focus:outline-none p-1 relative w-4/4 h-50 text-base hide-scrollbar resize-none"
                             />
                             <span
                                 className="absolute z-2 text-xs bottom-1 right-1"

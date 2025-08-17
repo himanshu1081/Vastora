@@ -10,6 +10,8 @@ import { FaHeart } from "react-icons/fa";
 
 function Sidebar() {
     const sidebar = useSelector((state) => state.sidebar.showSidebar);
+    const { userData } = useSelector((state) => state.auth)
+
     const dispatch = useDispatch();
 
     const ShowLabel = ({ icon, label, link }) => {
@@ -60,7 +62,9 @@ function Sidebar() {
 
                     <ShowLabel label="Home" link="/" icon={<TiHome className="text-white size-5 md:size-6" />} />
                     <ShowLabel label="History" link="/history" icon={<RiChatHistoryFill className="text-white size-5 md:size-6" />} />
-                    <ShowLabel label="Profile" link="/profile" icon={<CgProfile className="text-white size-5 md:size-6" />} />
+                    {userData && (
+                        <ShowLabel label="Profile" link={`/profile/${userData.username}`} icon={<CgProfile className="text-white size-5 md:size-6" />} />
+                    )}
                     <ShowLabel label="Liked Videos" link="/liked-videos" icon={<FaHeart className="text-white size-5 md:size-6" />} />
                     <ShowLabel label="Subscription" link="/subscription" icon={<MdSubscriptions className="text-white size-5 md:size-6" />} />
                 </div>

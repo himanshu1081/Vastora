@@ -1,4 +1,6 @@
-const Card = ({ channelName, avatar, title, viewCount, thumbnail, date,onClick }) => {
+import { useNavigate } from "react-router-dom"
+
+const Card = ({ username, channelName, avatar, title, viewCount, thumbnail, date, onClick }) => {
 
 
     const views = () => {
@@ -14,6 +16,8 @@ const Card = ({ channelName, avatar, title, viewCount, thumbnail, date,onClick }
             return viewCount
         }
     }
+
+    const navigate = useNavigate();
 
     return (
         <>
@@ -38,9 +42,12 @@ const Card = ({ channelName, avatar, title, viewCount, thumbnail, date,onClick }
                             className="w-full line-clamp-1 md:line-clamp-2 text-base text-white">
                             {title}
                         </div>
-                        <span className="w-full line-clamp-1 ">{channelName}</span>
+                        <span className="w-full line-clamp-1 hover:text-white" onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/profile/${username}`);
+                        }}>{channelName}</span>
                         <div
-                        className="flex justify-between items-center w-full ">
+                            className="flex justify-between items-center w-full ">
                             <span className="">{views()} views</span>
                             {date}
                         </div>

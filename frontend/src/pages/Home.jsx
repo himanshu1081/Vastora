@@ -31,14 +31,15 @@ function Home() {
             <Sidebar />
             <Navbar />
             <div className="bg-black h-screen text-lg text-black w-screen font-figtree pt-15 pb-5 sm:pt-25 overflow-x-hidden hide-scrollbar ">
-                <div className="w-full grid grid-cols-1 gap-2 md:gap-4 place-items-center sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 sm:px-5 md:pl-20">
+                <div className="w-full grid grid-cols-1 gap-2 md:gap-4 place-items-center sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 sm:px-5 md:pl-20">
                     {videos.map((video) => (
                         <Card
                             key={video._id}
                             channelName={video.ownerName}
                             avatar={video.ownerAvatar} title={video.title}
                             thumbnail={video.thumbnail} viewCount={video.views}
-                            date={video.createdAt.split('T')[0]}
+                            username={video.ownerUsername}
+                            date={video.createdAt.split('T')[0].split('-').reverse().join('-')}
                             onClick={() => handleClick(video._id)} />
                     ))}
                 </div>

@@ -16,7 +16,6 @@ const videoUpload = asyncHandler(async (req, res) => {
     if (!_id) {
         throw new ApiError(400, "User not logged in!");
     }
-    console.log("FILES RECEIVED:", req.files);
 
     const videoPath = req.files?.videoFile?.[0]?.path;
 
@@ -28,7 +27,6 @@ const videoUpload = asyncHandler(async (req, res) => {
     const duration = info.streams[0].duration / 60;
     const videoFile = await uploadOnCloudinary(videoPath);
     let thumbnail;
-    console.log(thumbnailPath)
     if (thumbnailPath) {
         thumbnail = await uploadOnCloudinary(thumbnailPath);
         if (!thumbnail) {
@@ -96,7 +94,8 @@ const getVideos = asyncHandler(async (req, res) => {
                 createdAt: 1,
                 ownerId: "$owner._id",
                 ownerName: "$owner.fullName",
-                ownerAvatar: "$owner.avatar"
+                ownerAvatar: "$owner.avatar",
+                ownerUsername:"$owner.username"
             }
         }
     ]);
