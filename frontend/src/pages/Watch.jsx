@@ -341,7 +341,7 @@ function Watch() {
                                                 channelName={video.ownerName}
                                                 avatar={video.ownerAvatar} title={video.title}
                                                 thumbnail={video.thumbnail} viewCount={video.views}
-
+                                                date={video.createdAt.split('T')[0].split('-').reverse().join('-')}
                                                 onClick={() => { handleClick(video._id), setDescriptionExpand(false) }}
                                             />
                                         </div>

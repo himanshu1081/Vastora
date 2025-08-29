@@ -44,8 +44,9 @@ const Card = ({ username, channelName, avatar, title, viewCount, thumbnail, date
                         </div>
                         <span className="w-full line-clamp-1 hover:text-white" onClick={(e) => {
                             e.stopPropagation();
-                            navigate(`/profile/${username}`);
-                        }}>{channelName}</span>
+                            navigate(`/profile/${username}`);}}>
+                            {channelName}
+                        </span>
                         <div
                             className="flex justify-between items-center w-full ">
                             <span className="">{views()} views</span>

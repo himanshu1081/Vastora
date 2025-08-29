@@ -1,4 +1,4 @@
-const Card2 = ({ channelName, avatar, title, viewCount, thumbnail, onClick ,date }) => {
+const Card2 = ({ channelName, avatar, title, viewCount, thumbnail, onClick, date }) => {
 
 
     const views = () => {
@@ -33,12 +33,18 @@ const Card2 = ({ channelName, avatar, title, viewCount, thumbnail, onClick ,date
                     </div>
                     <div
                         className="flex flex-col justify-start items-baseline text-base 
-                        w-full h-13 md:h-17 min-w-0">
+                        w-full h-15 md:h-22 min-w-0 gap-1">
                         <span
                             className="w-full line-clamp-1 md:line-clamp-2">
                             {title}
                         </span>
-                         <div
+                        <div className="w-full line-clamp-1 text-gray-500 text-sm hover:text-white" onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/profile/${username}`);
+                        }}>
+                            {channelName}
+                        </div>
+                        <div
                             className="flex justify-between items-center w-full text-gray-500 text-sm">
                             <span className="">{views()} views</span>
                             {date}
