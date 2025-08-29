@@ -170,13 +170,15 @@ const updateDetails = asyncHandler(async (req, res) => {
     }
     if (fullName) user.fullName = fullName;
 
-    if (email) {
-        const checkEmail = await User.findOne({ email: email });
-        console.log(checkEmail)
-        if (checkEmail) {
-            throw new ApiError(404, "Email already used");
+    if (req?.user.email !== email) {
+        if (email) {
+            const checkEmail = await User.findOne({ email: email });
+            console.log(checkEmail)
+            if (checkEmail) {
+                throw new ApiError(404, "Email already used");
+            }
+            user.email = email;
         }
-        user.email = email;
     }
 
     await user.save({ validateBeforeSave: true });
@@ -301,7 +303,8 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
 });
 
 const getWatchHistory = asyncHandler(async (req, res) => {
-    const { _id } = req.user;
+    const { _id } = req?.user || {};
+
     const watchHistory = await User.aggregate([
         { $match: { _id: new mongoose.Types.ObjectId(_id) } },
         {
@@ -334,7 +337,8 @@ const getWatchHistory = asyncHandler(async (req, res) => {
                             createdAt: 1,
                             ownerId: "$owner._id",
                             ownerUsername: "$owner.username",
-                            ownerAvatar: "$owner.avatar"
+                            ownerAvatar: "$owner.avatar",
+                            ownerFullname: "$owner.fullName"
                         }
                     }
                 ]

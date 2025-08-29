@@ -2,20 +2,20 @@
 import { useState } from "react";
 
 
-const Toggle = ({ color='gray', size,onToggle}) => {
-    const [isToggled, setIsToggled] = useState(false);
+const Toggle = ({ color = 'gray', size, onToggle, toggle = false }) => {
+    const [isToggled, setIsToggled] = useState(toggle);
     const toggleSize = {
-        height:size,
-        width:size*2
+        height: size,
+        width: size * 2
     }
-    
-const handleChange=()=>{
-    const newState = !isToggled;
-    setIsToggled(newState);
-    if(onToggle){
-        onToggle(newState)
+
+    const handleChange = () => {
+        const newState = !isToggled;
+        setIsToggled(newState);
+        if (onToggle) {
+            onToggle(newState)
+        }
     }
-}
 
     return (
         <>

@@ -39,7 +39,7 @@ const Card2 = ({ channelName, avatar, title, viewCount, thumbnail, onClick ,date
                             {title}
                         </span>
                          <div
-                            className="flex justify-between items-center w-full ">
+                            className="flex justify-between items-center w-full text-gray-500 text-sm">
                             <span className="">{views()} views</span>
                             {date}
                         </div>

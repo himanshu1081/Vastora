@@ -92,6 +92,9 @@ const Navbar = () => {
                   <NavLink
                     to={`/profile/${userData.username}`}
                     className="flex justify-start items-center gap-2 p-2 w-full hover:bg-[#1b1f22]"
+                    onClick={() => {
+                      window.location.href = `/profile/${userData.username}`;
+                    }}
                   >
                     <CgProfile className="size-5 md:size-6" />
                     <span>Profile</span>
@@ -124,12 +127,12 @@ const Navbar = () => {
           <div className="h-1/4 w-11/12 sm:h-1/4 sm:w-2/4 md:w-1/4 text-white font-figtree font-extrabold rounded-lg flex flex-col justify-center items-center backdrop-blur-sm bg-white/30 border-1 border-white/20 gap-4"
             onClick={(e) => e.stopPropagation()}>
             <span className="text-xl cursor-default">Are you sure?</span>
-            <div className="flex gap-2">
-              <span className="p-2 bg-purple-800 rounded-lg cursor-pointer border-2 border-black/10"
+            <div className="flex gap-2 ">
+              <span className="px-2 py-1 bg-purple-800 font-medium rounded-lg cursor-pointer border-2 border-black/10 flex justify-center items-center"
                 onClick={() => setLogoutPopup(false)}>
                 Cancel
               </span>
-              <span className="p-2 bg-purple-800 rounded-lg cursor-pointer  border-2 border-black/10"
+              <span className="px-2 py-1 bg-purple-800 rounded-lg font-medium cursor-pointer  border-2 border-black/10 flex justify-center items-center"
                 onClick={handleLogout}>
                 Logout
               </span>
@@ -181,10 +184,13 @@ const Navbar = () => {
             <div className="relative flex justify-center items-center gap-3 md:gap-5 px-2">
               <NavLink
                 to="/upload"
-                className="flex justify-center items-center transition-all duration-200 ease-in-out h-5 sm:h-10 w-15 sm:w-25 gap-1 text-sm md:text-lg rounded-4xl hover:bg-[#3f464d]"
+                className="flex justify-center items-center transition-all duration-75 bg-purple-800 ease-in h-5 sm:h-10 w-15 
+                sm:w-25 gap-1 text-sm md:text-lg rounded-4xl hover:bg-purple-500 px-1"
               >
                 <FaPlus className="size-2 sm:size-5" />
-                <span className="text-xs sm:text-base font-bold">Create</span>
+                <span className="text-xs sm:text-base font-bold ">
+                  Create
+                </span>
               </NavLink>
               <img
                 src={userData.avatar || "/assets/default-avatar.png"}

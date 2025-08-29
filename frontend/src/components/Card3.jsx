@@ -22,7 +22,7 @@ const Card = ({ username, channelName, avatar, title, viewCount, thumbnail, date
     return (
         <>
             <div onClick={onClick}
-                className="transition-all duration-50 md:h-4/4 w-75 sm:w-full md:w-full border-2 border-white/20 backdrop-blur-2xl bg-[#0b0b0b] text-white rounded-2xl p-2 scale-100 hover:scale-101 hover:bg-[#8200db]/10 cursor-pointer">
+                className="transition-all duration-100 ease-in md:h-4/4 w-75 sm:w-full md:w-full border-2 border-white/20 backdrop-blur-2xl bg-[#0b0b0b] text-white rounded-2xl p-2 hover:bg-[#8200db]/10 cursor-pointer sm:flex">
                 <div className="aspect-video w-full rounded-lg overflow-hidden border-2 border-black/20 backdrop-blur-2xl ">
                     <img src={thumbnail} alt="thumbnail"
                         className="rounded-lg object-contain"
@@ -42,7 +42,7 @@ const Card = ({ username, channelName, avatar, title, viewCount, thumbnail, date
                             className="w-full line-clamp-1 md:line-clamp-2 text-base text-white">
                             {title}
                         </div>
-                        <span className="w-full line-clamp-1 hover:text-white" onClick={(e) => {
+                        <span className="transform-all duration-100 ease-in-out w-full line-clamp-1 hover:text-white" onClick={(e) => {
                             e.stopPropagation();
                             navigate(`/profile/${username}`);
                         }}>{channelName}</span>

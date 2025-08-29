@@ -1,5 +1,6 @@
 import { User } from "../models/users.model.js";
 import { Video } from "../models/videos.model.js";
+import { Comment } from "../models/comment.model.js"
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import asyncHandler from "../utils/asyncHandler.js";
@@ -50,6 +51,28 @@ const videoUpload = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, videoDetails, "Video uploaded successfully"));
 });
 
+const updateVideo = asyncHandler(async (req, res) => {
+    const { title, description, isPublished } = req?.body;
+    const { _id } = req.video;
+    const updateData = {};
+    const newThumbnailPath = req.file?.path || null;
+    if (newThumbnailPath) {
+        const newThumbnail = await uploadOnCloudinary(newThumbnailPath);
+        if (!newThumbnail) {
+            throw new ApiError(500, "Cloudinary upload failed");
+        }
+        updateData.thumbnail = newThumbnail.secure_url;
+    }
+    if (title) updateData.title = title;
+    if (description) updateData.description = description;
+    if (isPublished) updateData.isPublished = isPublished;
+
+
+    const updatedVideo = await Video.findByIdAndUpdate(_id, updateData, { new: true });
+
+    res.status(200).json(new ApiResponse(200, updatedVideo, "Details updated"))
+});
+
 const publishedToggle = asyncHandler(async (req, res) => {
     const videoInfo = req.video;
     const updatedVideo = await Video.findByIdAndUpdate(videoInfo._id, { isPublished: !videoInfo.isPublished }, { new: true })
@@ -57,7 +80,7 @@ const publishedToggle = asyncHandler(async (req, res) => {
 });
 
 const getVideos = asyncHandler(async (req, res) => {
-    let limit = parseInt(req.query.limit) || 10;
+    let limit = parseInt(req.query.limit) || 15;
     if (limit > 50) {
         limit = 50
     } else if (limit < 1) {
@@ -95,7 +118,7 @@ const getVideos = asyncHandler(async (req, res) => {
                 ownerId: "$owner._id",
                 ownerName: "$owner.fullName",
                 ownerAvatar: "$owner.avatar",
-                ownerUsername:"$owner.username"
+                ownerUsername: "$owner.username"
             }
         }
     ]);
@@ -104,19 +127,18 @@ const getVideos = asyncHandler(async (req, res) => {
 
 const deleteVideo = asyncHandler(async (req, res) => {
     const { _id, vPublicId, tPublicId } = req.video;
-
-    //deleting video and file from the server (I am using cloudinary)
-    await cloudinary.uploader.destroy(vPublicId, { resource_type: "video" })
-    await cloudinary.uploader.destroy(tPublicId, { resource_type: "image" })
+    console.log(_id, vPublicId, tPublicId)
 
     //Fetching all the comments on the video
     const comment = await Comment.find({ video: _id })
+    console.log(comment)
 
     //Getting their id's in an array using map
-    const commentIds = comment.map(c => c._id);
-
-    //deleting all the likes on the comments
-    await Likes.deleteMany({ comment: { $in: commentIds } })
+    if (comment) {
+        const commentIds = comment.map(c => c._id);
+        //deleting all the likes on the comments
+        await Likes.deleteMany({ comment: { $in: commentIds } })
+    }
 
     //deleting likes from the video
     await Likes.deleteMany({ video: _id })
@@ -126,28 +148,12 @@ const deleteVideo = asyncHandler(async (req, res) => {
 
     //deleting the video from database
     await Video.findByIdAndDelete(_id);
+
+    //deleting video and file from the server (I am using cloudinary)
+    await cloudinary.uploader.destroy(vPublicId, { resource_type: "video" })
+    await cloudinary.uploader.destroy(tPublicId, { resource_type: "image" })
+
     res.status(200).json(new ApiResponse(200, null, "Video deleted successfully"))
-});
-
-const updateVideo = asyncHandler(async (req, res) => {
-    const { title, description } = req.body;
-    const { _id } = req.video;
-    const updateData = {};
-    const newThumbnailPath = req.file?.path;
-    if (newThumbnailPath) {
-        const newThumbnail = await uploadOnCloudinary(newThumbnailPath);
-        if (!newThumbnail) {
-            throw new ApiError(500, "Cloudinary upload failed");
-        }
-        updateData.thumbnail = newThumbnail.secure_url;
-    }
-    if (title) updateData.title = title;
-    if (description) updateData.description = description;
-
-
-    const updatedVideo = await Video.findByIdAndUpdate(_id, updateData, { new: true });
-
-    res.status(200).json(new ApiResponse(200, updatedVideo, "Details updated"))
 });
 
 const watchVideo = asyncHandler(async (req, res) => {
@@ -188,7 +194,7 @@ const watchVideo = asyncHandler(async (req, res) => {
                 createdAt: 1,
                 ownerId: "$owner._id",
                 ownerName: "$owner.fullName",
-                ownerUsername : "$owner.username",
+                ownerUsername: "$owner.username",
                 ownerAvatar: "$owner.avatar"
             }
         }
@@ -200,16 +206,44 @@ const watchVideo = asyncHandler(async (req, res) => {
         return
     }
     if (user) {
-        await User.findByIdAndUpdate(user._id, {
-            $push: {
-                watchHistory: {
-                    $each: [videoObjectId],
-                    $position: 0
+        await User.findByIdAndUpdate(
+            user._id,
+            [
+                {
+                    $set: {
+                        watchHistory: {
+                            $concatArrays: [
+                                [videoObjectId], // new video first
+                                {
+                                    $filter: {
+                                        input: "$watchHistory",
+                                        cond: { $ne: ["$$this", videoObjectId] } // remove old occurrences
+                                    }
+                                }
+                            ]
+                        }
+                    }
                 }
-            }
-        })
+            ]
+        );
+
     }
-    res.status(200).json(new ApiResponse(200, video, "View counted"))
+    res.status(200).json(new ApiResponse(200, video, "View counted and history updated"))
 });
 
-export { videoUpload, publishedToggle, getVideos, deleteVideo, updateVideo, watchVideo };
+const videoDetails = asyncHandler(async (req, res) => {
+    const { videoId } = req.params;
+    const { _id } = req?.user || {}
+    if (!_id) {
+        throw new ApiError(404, "Bad request")
+    }
+    await doExist(videoId)
+    if (!videoId) {
+        return res.redirect("/");
+    }
+    const videoDetails = await Video.findById(videoId).select('-vPublicId -tPublicId');
+    res.status(200).json(new ApiResponse(200, videoDetails, "Video Info retrieved"))
+
+})
+
+export { videoUpload, publishedToggle, getVideos, deleteVideo, updateVideo, watchVideo, videoDetails };

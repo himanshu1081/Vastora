@@ -1,5 +1,3 @@
-import { Navbar } from "./Navbar";
-import Sidebar from "./Sidebar";
 import { motion } from "motion/react"
 
 function Animation({ size=8, elements=40 }) {

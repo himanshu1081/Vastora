@@ -4,6 +4,8 @@ import TextType from "../components/TextType";
 import Toggle from "../components/Toggle";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+
 //icons
 import { IoMdClose } from "react-icons/io";
 import { LiaCloudUploadAltSolid } from "react-icons/lia";
@@ -11,10 +13,16 @@ import axiosInstance from "../util/axiosIntance";
 
 function Upload() {
     const navigate = useNavigate();
+    const {userData } = useSelector((state) => state.auth);
+
     const handleSubmit = async () => {
         const formData = new FormData();
         if (files.videoFile == null) {
             toast.error("Upload video first")
+            return;
+        }
+        if (files.thumbnail == null) {
+            toast.error("No thumbnail")
             return;
         }
         if (letterCount.titleCount === 0) {
@@ -22,7 +30,7 @@ function Upload() {
             return;
         }
         formData.append("videoFile", files.videoFile)
-        if (files.thumbnail) formData.append("thumbnail", files.thumbnail)
+        formData.append("thumbnail", files.thumbnail)
         formData.append("title", videoInfo.title)
         formData.append("isPublished", videoInfo.isPublished)
         if (videoInfo.description != "") formData.append("description", videoInfo.description)
@@ -30,11 +38,13 @@ function Upload() {
         try {
             await axiosInstance.post("/video/upload", formData)
             toast.success('Video Uploaded Successfully!', { id: toastID });
-            navigate("/profile")
+            navigate(`/profile/${userData.username}`)
         } catch (err) {
             console.log("Message : ", err)
             console.log(err.response?.data)
-            toast.error(err.response?.data?.message, { id: toastID })
+            if(err){
+                toast.error("Something went wrong",{id:toastID})
+            }
         }
     }
 
@@ -144,7 +154,7 @@ function Upload() {
                                     </div>
                                     :
                                     <label className="flex w-full h-fit justify-center items-center  rounded-lg">
-                                        <span className="rounded  bg-purple-500 flex p-2 w-4/4 md:w-3/4 lg:w-2/4 justify-center items-center gap-2 font-bold">
+                                        <span className="rounded  bg-purple-700 flex p-2 w-4/4 md:w-3/4 lg:w-2/4 justify-center cursor-pointer  items-center gap-2 font-bold hover:bg-purple-500">
                                             <LiaCloudUploadAltSolid />
                                             Upload Video
                                         </span>
@@ -164,7 +174,7 @@ function Upload() {
                                     </div>
                                     :
                                     <label className="flex justify-center items-center rounded-lg w-4/4 md:w-3/4 lg:w-2/4 h-fit">
-                                        <span className="rounded w-full bg-purple-500 flex p-2 justify-center items-center gap-2 font-bold">
+                                        <span className="rounded w-full bg-purple-700 flex p-2 justify-center items-center gap-2 font-bold cursor-pointer hover:bg-purple-500">
                                             <LiaCloudUploadAltSolid />
                                             Upload Thumbnail
                                         </span>
@@ -214,7 +224,7 @@ function Upload() {
                         </div>
                     </div>
                     <div
-                        className="transition-all duration-100 ease-in bg-purple-500 w-30 h-fit rounded-md flex justify-center items-center p-2 font-extrabold hover:bg-purple-700 cursor-pointer"
+                        className="transition-all duration-100 ease-in bg-purple-700 w-30 h-fit rounded-md flex justify-center items-center p-2 font-extrabold hover:bg-purple-500 cursor-pointer"
                         onClick={handleSubmit}
                     >
                         Post

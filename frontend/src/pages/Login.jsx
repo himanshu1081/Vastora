@@ -5,6 +5,7 @@ import { NavLink, useNavigate } from "react-router-dom"
 import axiosInstance from "../util/axiosIntance.js";
 import { login, } from "../features/authSlice.js";
 import { useDispatch } from "react-redux";
+import LightRays from "../components/LightRays.jsx"
 
 function Login() {
     const naviagte = useNavigate();
@@ -45,7 +46,7 @@ function Login() {
                     password: form.password
                 }
             )
-            
+
             const { _id, fullName, username, avatar, coverImage, email } = res?.data?.data?.userData;
             dispatch(login(
                 { _id, fullName, username, avatar, coverImage, email }
@@ -61,10 +62,24 @@ function Login() {
 
     return (
         <>
-            <div className="fixed h-screen w-screen z-0 bg-black">
+            {/* <div className="fixed h-screen w-screen z-0 bg-black">
                 {memoAnimation}
+            </div> */}
+            <div className="z-0 absolute bg-black w-screen h-screen">
+                <LightRays
+                    raysOrigin="top-center"
+                    raysColor="#8200db"
+                    raysSpeed={1.5}
+                    lightSpread={2}
+                    rayLength={2.5}
+                    followMouse={true}
+                    mouseInfluence={0.1}
+                    noiseAmount={0.1}
+                    distortion={0.05}
+                    className="custom-rays"
+                />
             </div>
-            <div className="fixed bg-black/30 backdrop-blur-md w-screen h-screen flex flex-col justify-center items-center z-23 font-figtree gap-4">
+            <div className="fixed bg-black/30 w-screen h-screen flex flex-col justify-center items-center z-23 font-figtree gap-4">
                 <div className="font-figtree text-white font-black flex justify-center items-center text-3xl sm:text-6xl gap-2">
                     <span >Vastora</span>
                     <RotatingText

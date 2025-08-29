@@ -4,6 +4,7 @@ import Profile from "./pages/Profile.jsx";
 import Login from "./pages/Login.jsx";
 import Home from "./pages/Home.jsx";
 import History from "./pages/History.jsx";
+import VideoSetting from "./pages/VideoSetting.jsx";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Upload from "./pages/Upload.jsx";
 import { Toaster } from 'react-hot-toast';
@@ -26,13 +27,16 @@ const router = createBrowserRouter([
   },
   {
     path: "/login",
-    element: 
+    element:
       <Login />
   },
   {
     path: "/profile/:username",
-    element:
-      <Profile />
+    element: <Profile />
+  },
+  {
+    path: "/profile/:username/vsettings/:videoId",
+    element: <VideoSetting />
   },
   {
     path: "/watch/:videoId",

@@ -13,7 +13,8 @@ const userSchema = mongoose.Schema({
     watchHistory: [
         {
             type: Schema.Types.ObjectId,
-            ref: "Video"
+            ref: "Video",
+            default: []
         }],
     email: {
         type: String,

@@ -84,22 +84,28 @@ function Watch() {
     }
 
     const handleComment = async (e) => {
-        const commentResponse = await axiosInstance.post(`comment/add-comment/${videoId}`, { content: comment });
-        const newComment = commentResponse.data?.data;
-        contentRef.current.innerText = ""
-        toast('Comment Posted', {
-            icon: '✅',
-        });
-        setCommentPreview(prev => [
-            {
-                _id: newComment._id,
-                content: newComment.content,
-                isMine: true,
-                owner: {
-                    _id: userData?._id, fullName: userData?.fullName, avatar: userData?.avatar
+        if (comment !== '') {
+
+            const commentResponse = await axiosInstance.post(`comment/add-comment/${videoId}`, { content: comment });
+            const newComment = commentResponse.data?.data;
+            contentRef.current.innerText = ""
+            toast('Comment Posted', {
+                icon: '✅',
+            });
+            setComment("")
+            setCommentPreview(prev => [
+                {
+                    _id: newComment._id,
+                    content: newComment.content,
+                    isMine: true,
+                    owner: {
+                        _id: userData?._id, fullName: userData?.fullName, avatar: userData?.avatar
+                    }
                 }
-            }
-            , ...prev]);
+                , ...prev]);
+        } else {
+            toast.error("Comment can't be empty")
+        }
     }
 
     const handleSubscription = async (action) => {
@@ -193,11 +199,11 @@ function Watch() {
                                 <div className="md:flex md:flex-col md:gap-2 md:w-8/12" >
                                     <div className="aspect-video h-1/4 pb-2 md:pb-0">
                                         <video
-                                            src={watch.videoFile}
+                                            src={watch?.videoFile}
                                             controls
                                             autoPlay
-                                            
-                                            className="w-full h-full object-contain rounded-xl bg-black  "
+
+                                            className="w-full h-full object-contain rounded-xl bg-black outline-0 "
                                         />
                                     </div>
                                     <div className="p-3 bg-[#0b0b0b] relative flex flex-col justify-start items-start gap-1 rounded-lg " >
@@ -207,7 +213,7 @@ function Watch() {
                                         <div className={`text-base font-bold w-full relative ${descriptionExpand ? "h-fit line-clamp-none" : "line-clamp-2"}`}
                                             onClick={() => setDescriptionExpand(!descriptionExpand)}>
                                             <div className="w-11/12 text-sm sm:text-base md:text-lg">
-                                                {watch.title}
+                                                {watch?.title}
                                             </div>
                                         </div>
                                         <div
@@ -216,56 +222,56 @@ function Watch() {
                                                 className="flex w-full justify-between items-center gap-1 sm:gap-3">
                                                 <div
                                                     className="flex justify-between items-center gap-2 bg-[#171717] rounded-md p-1 px-2">
-                                                    <img src={watch.ownerAvatar}
+                                                    <img src={watch?.ownerAvatar}
                                                         alt="avatar"
                                                         className="rounded-full w-8 h-8 md:w-10 lg:w-10 md:h-10 object-cover cursor-pointer"
-                                                        onClick={() => navigate(`/profile/${watch.ownerUsername}`)} />
+                                                        onClick={() => navigate(`/profile/${watch?.ownerUsername}`)} />
                                                     <div
                                                         className="flex flex-col text-base line-clamp-1 items-start justify-center w-fit max-w-40 lg:max-w-50 xl:max-w-60">
                                                         <div
                                                             className="line-clamp-1  font-semibold cursor-pointer"
-                                                            onClick={() => navigate(`/profile/${watch.ownerUsername}`)}>
-                                                            {watch.ownerName}
+                                                            onClick={() => navigate(`/profile/${watch?.ownerUsername}`)}>
+                                                            {watch?.ownerName}
                                                         </div>
                                                         <span
                                                             className="text-xs text-gray-400">
-                                                            {videoInfo.subscribers} subscribers
+                                                            {videoInfo?.subscribers} subscribers
                                                         </span>
                                                     </div>
                                                 </div>
                                                 <div className="transition-all duration-150 ease-in-out bg-purple-800 p-2 px-4 md:px-3 w-fit flex justify-center text-sm items-center rounded-4xl hover:bg-purple-900 cursor-pointer font-figtree font-bold "
-                                                    onClick={() => videoInfo.isSubscribed ? (handleSubscription("unsubscribe")) : handleSubscription("subscribe")}
+                                                    onClick={() => videoInfo?.isSubscribed ? (handleSubscription("unsubscribe")) : handleSubscription("subscribe")}
                                                 >
-                                                    {videoInfo.isSubscribed ? ("Unsubscribe") : ("Subscribe")}
+                                                    {videoInfo?.isSubscribed ? ("Unsubscribe") : ("Subscribe")}
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="flex justify-center items-center w-full text-sm md:text-base text-gray-500 " onClick={() => setDescriptionExpand(!descriptionExpand)}>
                                             <span className="w-full">
-                                                {watch.views} views
+                                                {watch?.views} views
                                             </span>
                                             <div className="flex justify-end w-full md:w-0"
                                                 onClick={(e) => e.stopPropagation()}>
                                                 <div className="flex w-fit rounded-4xl h-fit gap-2 md:gap-4 bg-purple-800 p-2">
-                                                    <span className={`transition-all duration-150 ease-in-out w-fit flex items-center gap-1 cursor-pointer hover:text-white ${videoInfo.isLiked ? "text-white" : ""}`}>
+                                                    <span className={`transition-all duration-150 ease-in-out w-fit flex items-center gap-1 cursor-pointer hover:text-white ${videoInfo?.isLiked ? "text-white" : ""}`}>
                                                         <BiLike className="h-5 sm:h-6 w-fit "
-                                                            onClick={() => videoInfo.isLiked ? (handleLike("unlike")) : handleLike("like")} />
+                                                            onClick={() => videoInfo?.isLiked ? (handleLike("unlike")) : handleLike("like")} />
                                                         {videoInfo?.likes}
                                                     </span>
-                                                    <span className={`transition-all duration-150 ease-in-out w-fit flex items-center gap-1 cursor-pointer hover:text-white ${videoInfo.isDisliked ? "text-white" : ""}`}>
+                                                    <span className={`transition-all duration-150 ease-in-out w-fit flex items-center gap-1 cursor-pointer hover:text-white ${videoInfo?.isDisliked ? "text-white" : ""}`}>
                                                         <BiDislike className="h-5 sm:h-6 w-fit "
-                                                            onClick={() => videoInfo.isDisliked ? (handleLike("undislike")) : handleLike("dislike")} />
+                                                            onClick={() => videoInfo?.isDisliked ? (handleLike("undislike")) : handleLike("dislike")} />
                                                         {videoInfo?.dislikes}
                                                     </span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className={`flex flex-col justify-start line-clamp-2 ${descriptionExpand ? "max-h-fit" : "max-h-0"}`}>
-                                            <span>
-                                                {watch.createdAt.split('T')[0]}
+                                            <span className="text-gray-500 text-sm font-bold">
+                                                Uploaded on {watch?.createdAt.split('T')[0].split('-').reverse().join('-')}
                                             </span>
-                                            <span className="text-sm py-2">
-                                                {watch.description}
+                                            <span className="text-sm py-2 whitespace-pre-line">
+                                                {watch?.description}
                                             </span>
                                         </div>
                                     </div>
@@ -294,7 +300,7 @@ function Watch() {
                                             {showPreview ? <div>Hide Comments</div> : <div>Show Comments</div>}
                                         </div>
 
-                                        <div className={`transition-all duration-200 ease-in-out w-full flex justify-start items-center overflow-hidden ${showPreview ?  "max-h-50" : "max-h-0"}`}>
+                                        <div className={`transition-all duration-200 ease-in-out w-full flex justify-start items-center overflow-hidden ${showPreview ? "max-h-fit" : "max-h-0"}`}>
                                             {commentPreview.length > 0 ?
                                                 (
                                                     < div >
@@ -319,7 +325,7 @@ function Watch() {
                                                 :
                                                 (
                                                     <div className="w-full flex justify-center items-center font-black text-xl md:text-3xl">
-                                                        No Comments
+                                                        <img src="/assets/no-comments.png" alt="no-comments" className="w-50 h-70 sm:h-90 sm:w-65 md:h-110 md:w-80" />
                                                     </div>
                                                 )
                                             }

@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { LiaCloudUploadAltSolid } from "react-icons/lia";
 import { IoMdClose } from "react-icons/io";
 import toast from "react-hot-toast";
+import LightRays from "../components/LightRays.jsx";
 
 
 function Register() {
@@ -67,12 +68,14 @@ function Register() {
         if (avatar) formData.append("avatar", avatar);
         if (coverImage) formData.append("coverImage", coverImage);
         try {
-            const res = await axiosInstance.post("/user/register", formData)
-            toast.promise(res, {
-                loading: 'Registering...',
-                success: 'Registered successfully 🎉',
-                error: 'Something went wrong 😢',
-            });
+            await toast.promise(
+                axiosInstance.post("/user/register", formData),
+                {
+                    loading: "Registering...",
+                    success: "Registered successfully 🎉",
+                    error: "Something went wrong 😢",
+                }
+            );
             navigate("/login")
         } catch (err) {
             console.log("Message : ", err)
@@ -84,11 +87,21 @@ function Register() {
         }
     }
     return (
-        <>
-            <div className="w-screen h-screen fixed bg-black z-0">
-                {memoAnimation}
-            </div>
-            <div className="w-screen h-screen z-1 bg-black backdrop-blur-md fixed font-figtree text-white flex justify-center items-center ">
+        <><div className="z-0 absolute bg-black w-screen h-screen">
+            <LightRays
+                raysOrigin="top-center"
+                raysColor="#8200db"
+                raysSpeed={1.5}
+                lightSpread={2}
+                rayLength={2.5}
+                followMouse={true}
+                mouseInfluence={0.1}
+                noiseAmount={0.5}
+                distortion={0.05}
+                className="custom-rays"
+            />
+        </div>
+            <div className="w-screen h-screen z-1 bg-black/30 backdrop-blur-md fixed font-figtree text-white flex justify-center items-center ">
                 <Stepper
                     initialStep={1}
                     onFinalStepCompleted={sumbitForm}
