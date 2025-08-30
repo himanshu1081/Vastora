@@ -48,7 +48,7 @@ function Watch() {
                 });
 
                 // suggestions of other videos
-                const suggestions = await axiosInstance.get("/video");
+                const suggestions = await axiosInstance.get("/video", { params: { limit: 10 } })
                 setVideos(suggestions?.data?.data);
 
                 window.scrollTo({ top: 0, behavior: "smooth" });

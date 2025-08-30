@@ -80,7 +80,7 @@ const publishedToggle = asyncHandler(async (req, res) => {
 });
 
 const getVideos = asyncHandler(async (req, res) => {
-    let limit = parseInt(req.query.limit) || 15;
+    let limit = parseInt(req?.query?.limit) || 15;
     if (limit > 50) {
         limit = 50
     } else if (limit < 1) {
