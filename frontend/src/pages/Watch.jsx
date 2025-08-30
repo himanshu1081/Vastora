@@ -139,22 +139,22 @@ function Watch() {
 
         if (type === "like") {
             await axiosInstance.patch(`like/like-video/${videoId}?type=${type}`);
-            setVideoInfo((prev) => ({ ...prev, likes: videoInfo.likes + 1, isLiked: true }));
             if (videoInfo.isDisliked) {
                 setVideoInfo((prev) => ({ ...prev, dislikes: videoInfo.dislikes - 1, isDisliked: false }));
             }
+            setVideoInfo((prev) => ({ ...prev, likes: videoInfo.likes + 1, isLiked: true }));
         } else if (type === "dislike") {
-            await axiosInstance.patch(`like/like-video/${videoId}?type=${type}`);
-            setVideoInfo((prev) => ({ ...prev, dislikes: videoInfo.dislikes + 1, isDisliked: true }));
             if (videoInfo.isLiked) {
                 setVideoInfo((prev) => ({ ...prev, likes: videoInfo.likes - 1, isLiked: false }));
             }
+            setVideoInfo((prev) => ({ ...prev, dislikes: videoInfo.dislikes + 1, isDisliked: true }));
+            await axiosInstance.patch(`like/like-video/${videoId}?type=${type}`);
         } else if (type === "unlike") {
-            await axiosInstance.patch(`like/like-video/${videoId}?type=neutral`);
             setVideoInfo((prev) => ({ ...prev, likes: videoInfo.likes - 1, isLiked: false }));
-        } else if (type === "undislike") {
             await axiosInstance.patch(`like/like-video/${videoId}?type=neutral`);
+        } else if (type === "undislike") {
             setVideoInfo((prev) => ({ ...prev, dislikes: videoInfo.dislikes - 1, isDisliked: false }));
+            await axiosInstance.patch(`like/like-video/${videoId}?type=neutral`);
         }
     }
 
