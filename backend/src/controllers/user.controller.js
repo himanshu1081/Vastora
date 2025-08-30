@@ -109,10 +109,10 @@ const logoutUser = asyncHandler(async (req, res) => {
     userData.refreshToken = undefined;
     await userData.save({ validateBeforeSave: false })
     const option = {
-        httpOnly: true,
-        sameSite: 'Lax',
-        secure: false
-    }
+    httpOnly: true,
+    sameSite: 'none',
+    secure: true
+}
     res.clearCookie("refreshToken", option).clearCookie("accessToken", option).json({
         message: "Cookies cleared"
     })
