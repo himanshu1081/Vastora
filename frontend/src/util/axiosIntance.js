@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const axiosInstance = axios.create({
-    baseURL: 'https://vastora.onrender.com/api/v1',
+    baseURL: import.meta.env.VITE_API_URL,
     withCredentials: true,
     proxy: false
 });
