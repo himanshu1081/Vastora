@@ -1,5 +1,5 @@
 import axios from "axios"
-import { store } from "src/app/store.js"
+import store from "src/app/store.js"
 
 const axiosInstance = axios.create({
     baseURL: 'https://vastora.onrender.com/api/v1',
