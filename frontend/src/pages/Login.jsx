@@ -46,10 +46,10 @@ function Login() {
                     password: form.password
                 }
             )
-
+            const token = res?.data?.token;
             const { _id, fullName, username, avatar, coverImage, email } = res?.data?.data?.userData;
             dispatch(login(
-                { _id, fullName, username, avatar, coverImage, email }
+                { _id, fullName, username, avatar, coverImage, email },token
             ))
             naviagte("/")
         }
