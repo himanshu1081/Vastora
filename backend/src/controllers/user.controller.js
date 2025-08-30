@@ -93,9 +93,9 @@ const loginUser = asyncHandler(async (req, res) => {
         console.log(`Welcome back ${user.fullName}`)
         const option = {
             httpOnly: true,
-            sameSite: 'Lax',
-            secure: false
-        }
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+            secure: process.env.NODE_ENV === 'production', // HTTPS only in prod
+        };
         return res.status(200).cookie("accessToken", accessToken, option).cookie("refreshToken", refreshToken, option).json(
             new ApiResponse(200, { userData, accessToken, refreshToken }, "Cookies sent!")
         )
