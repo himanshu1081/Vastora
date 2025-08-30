@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { showSidebar } from "../features/sidebarSlice.js";
 import { login, logout } from "../features/authSlice.js";
 import { AnimatePresence, motion } from "framer-motion";
+import { useParams } from "react-router-dom";
 
 // Icons
 import { IoMdSettings } from "react-icons/io";
@@ -22,6 +23,7 @@ const Navbar = () => {
   const sidebar = useSelector((state) => state.sidebar.showSidebar);
   const dispatch = useDispatch();
   const { userData, isLoggedIn } = useSelector((state) => state.auth);
+  const { username } = useParams();
 
   useEffect(() => {
     const checkUser = async () => {
@@ -43,7 +45,7 @@ const Navbar = () => {
       }
     };
     checkUser();
-  }, []);
+  }, [username]);
 
   const handleChange = (e) => setSearch(e.target.value);
 

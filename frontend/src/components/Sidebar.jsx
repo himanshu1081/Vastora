@@ -14,7 +14,11 @@ function Sidebar() {
 
     const dispatch = useDispatch();
 
-    const ShowLabel = ({ icon, label, link }) => {
+    const ShowLabel = ({ icon, label, link, onClick }) => {
+
+        const handleReload = () => {
+            window.location.reload();
+        }
         return (
             <NavLink
                 to={link}
@@ -23,6 +27,7 @@ function Sidebar() {
                     ${sidebar ? "opacity-100 md:opacity-100" : "opacity-0 md:opacity-100"} 
                     ${isActive ? "bg-[#8200db]/30" : ""} hover:bg-[#8200db]/20`
                 }
+                onClick={onClick}
             >
                 <div>{icon}</div>
                 {sidebar && <span>{label}</span>}
@@ -63,7 +68,7 @@ function Sidebar() {
                     <ShowLabel label="Home" link="/" icon={<TiHome className="text-white size-5 md:size-6" />} />
                     <ShowLabel label="History" link="/history" icon={<RiChatHistoryFill className="text-white size-5 md:size-6" />} />
                     {userData && (
-                        <ShowLabel label="Profile" link={`/profile/${userData?.username}`} icon={<CgProfile className="text-white size-5 md:size-6" />} />
+                        <ShowLabel label="Profile" link={`/profile/${userData?.username}`} icon={<CgProfile className="text-white size-5 md:size-6" />} onClick={()=>handleReload()} />
                     )}
                     <ShowLabel label="Liked Videos" link="/liked-videos" icon={<FaHeart className="text-white size-5 md:size-6" />} />
                     <ShowLabel label="Subscription" link="/subscription" icon={<MdSubscriptions className="text-white size-5 md:size-6" />} />
