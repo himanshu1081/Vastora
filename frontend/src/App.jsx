@@ -9,6 +9,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Upload from "./pages/Upload.jsx";
 import { Toaster } from 'react-hot-toast';
 import 'video.js/dist/video-js.css'
+import LikedVideos from "./pages/LikedVideos.jsx";
+import Subscriptions from "./pages/Subscriptions.jsx";
 
 
 
@@ -52,6 +54,16 @@ const router = createBrowserRouter([
     path: "/upload",
     element:
       <Upload />
+  },
+  {
+    path: "/liked-videos",
+    element:
+      <LikedVideos />
+  },
+  {
+    path: "/subscription",
+    element:
+      <Subscriptions />
   }
 ])
 
