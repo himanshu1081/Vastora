@@ -92,9 +92,6 @@ const Navbar = () => {
                   <NavLink
                     to={`/profile/${userData.username}`}
                     className="flex justify-start items-center gap-2 p-2 w-full hover:bg-[#1b1f22]"
-                    onClick={() => {
-                      window.location.href = `/profile/${userData.username}`;
-                    }}
                   >
                     <CgProfile className="size-5 md:size-6" />
                     <span>Profile</span>
