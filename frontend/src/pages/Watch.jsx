@@ -166,7 +166,7 @@ function Watch() {
                     (
                         <div className="bg-black h-screen w-screen text-white font-figtree flex justify-center items-center">
                             <TextType
-                                text={["Loading...", "What is study even about?", "Vast Aura"]}
+                                text={["Loading...", "Vast Aura"]}
                                 typingSpeed={75}
                                 pauseDuration={1800}
                                 showCursor={true}

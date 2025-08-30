@@ -73,7 +73,7 @@ const Navbar = () => {
         {(dropdown === "profile" || dropdown === "dots") && (
           <>
             <div
-              className="fixed z-24 inset-0"
+              className="fixed bg-black z-24 inset-0"
               onClick={() => setDropdown(null)}
             />
             <motion.div
@@ -161,7 +161,7 @@ const Navbar = () => {
         </div>
 
         <div
-          className="transition-all duration-300 ease-in-out flex justify-start items-center
+          className="transition-all duration-300 ease-in-out flex justify-between items-center
         bg-[#8200db]/30 h-6 w-50 sm:w-70 sm:h-10 md:w-100 rounded-4xl p-1 sm:p-2 md:p-4 border
         border-gray-400 hover:bg-[#8200db]/20"
         >

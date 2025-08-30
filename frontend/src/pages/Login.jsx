@@ -82,7 +82,7 @@ function Login() {
                 <div className="font-figtree text-white font-black flex justify-center items-center text-3xl sm:text-6xl gap-2">
                     <span >Vastora</span>
                     <RotatingText
-                        texts={['Vibe', 'Cringe', 'Dope', 'Chan']}
+                        texts={['Slaps', 'Bussin', 'Sybau', 'Chan']}
                         mainClassName="px-2 sm:px-2 md:px-3 bg-purple-700 text-white overflow-hidden py-0.5 sm:py-1 md:py-2 justify-center rounded-lg"
                         staggerFrom={"last"}
                         initial={{ y: "100%" }}
