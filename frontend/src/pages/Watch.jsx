@@ -138,11 +138,11 @@ function Watch() {
         }
 
         if (type === "like") {
-            await axiosInstance.patch(`like/like-video/${videoId}?type=${type}`);
             if (videoInfo.isDisliked) {
                 setVideoInfo((prev) => ({ ...prev, dislikes: videoInfo.dislikes - 1, isDisliked: false }));
             }
             setVideoInfo((prev) => ({ ...prev, likes: videoInfo.likes + 1, isLiked: true }));
+            await axiosInstance.patch(`like/like-video/${videoId}?type=${type}`);
         } else if (type === "dislike") {
             if (videoInfo.isLiked) {
                 setVideoInfo((prev) => ({ ...prev, likes: videoInfo.likes - 1, isLiked: false }));
