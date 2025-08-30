@@ -19,6 +19,11 @@ app.use(cors({
     credentials: true,
 }));
 
+res.cookie("token", jwtToken, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+});
 
 
 app.use(express.json({ limit: "16kb" }))
