@@ -64,8 +64,8 @@ function Login() {
             {/* <div className="fixed h-screen w-screen z-0 bg-black">
                 {memoAnimation}
             </div> */}
-            <div className="z-0 absolute bg-black w-screen h-screen">
-                <LightRays
+            <div className="z-0 absolute mesh w-screen h-screen">
+                {/* <LightRays
                     raysOrigin="top-center"
                     raysColor="#8200db"
                     raysSpeed={1.5}
@@ -76,7 +76,7 @@ function Login() {
                     noiseAmount={0.1}
                     distortion={0.05}
                     className="custom-rays"
-                />
+                /> */}
             </div>
             <div className="fixed bg-black/30 w-screen h-screen flex flex-col justify-center items-center z-23 font-figtree gap-4">
                 <div className="font-figtree text-white font-black flex justify-center items-center text-3xl sm:text-6xl gap-2">
@@ -118,7 +118,7 @@ function Login() {
                     </div>
 
                     <span
-                        className="transition-all duration-200 ease-in-out bg-purple-700 rounded p-2 w-full flex justify-center items-center font-bold shadow-sm shadow-black/30 md:bg-purple-500 md:hover:bg-purple-700 hover:cursor-pointer"
+                        className="transition-all duration-200 ease-in-out bg-purple-700 rounded p-2 w-full flex justify-center items-center font-bold shadow-sm shadow-black/30  md:hover:bg-purple-600 hover:cursor-pointer"
                         onClick={handleLogIn}
 
                     >

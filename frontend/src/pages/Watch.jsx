@@ -40,6 +40,7 @@ function Watch() {
     useEffect(() => {
         const watchVideo = async () => {
             try {
+                window.scrollTo({ top: 0, behavior: "smooth" });
                 // getVideo
                 const video = await axiosInstance.get(`video/watch/${videoId}`)
                 setWatch({

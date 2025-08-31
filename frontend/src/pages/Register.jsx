@@ -87,8 +87,9 @@ function Register() {
         }
     }
     return (
-        <><div className="z-0 absolute bg-black w-screen h-screen">
-            <LightRays
+        <>
+        <div className="z-0 absolute mesh w-screen h-screen">
+            {/* <LightRays
                 raysOrigin="top-center"
                 raysColor="#8200db"
                 raysSpeed={1.5}
@@ -99,7 +100,7 @@ function Register() {
                 noiseAmount={0.5}
                 distortion={0.05}
                 className="custom-rays"
-            />
+            /> */}
         </div>
             <div className="w-screen h-screen z-1 bg-black/30 backdrop-blur-md fixed font-figtree text-white flex justify-center items-center ">
                 <Stepper

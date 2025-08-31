@@ -73,7 +73,7 @@ const Navbar = () => {
         {(dropdown === "profile" || dropdown === "dots") && (
           <>
             <div
-              className="fixed bg-black z-24 inset-0"
+              className="fixed z-24 inset-0"
               onClick={() => setDropdown(null)}
             />
             <motion.div

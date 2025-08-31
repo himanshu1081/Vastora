@@ -27,8 +27,9 @@
 @theme {
   --font-inter: Inter, "sans-serif"
 }
+
 @theme {
-  --font-figtree: Figtree,'sans-serif';
+  --font-figtree: Figtree, 'sans-serif';
 }
 
 @import "tailwindcss";
@@ -40,9 +41,12 @@
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
 .hide-scrollbar {
-  -ms-overflow-style: none;  /* IE/Edge */
-  scrollbar-width: none;     /* Firefox */
+  -ms-overflow-style: none;
+  /* IE/Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 .custom-scroll::-webkit-scrollbar {
@@ -69,3 +73,16 @@
   scrollbar-color: #888 #f1f1f1;
 }
 
+.mesh {
+  background: radial-gradient(at 12.887930870056152% 80.9166665871938%, #230444 0px, transparent 50%), radial-gradient(at 37.241379145918216% 11.124998728434244%, #6613c8 0px, transparent 50%), radial-gradient(at 80.88362052522857% 35.91666658719381%, #5d098f 0px, transparent 50%), radial-gradient(at 78.18965500798718% 91.95833365122478%, #ad5cf2 0px, transparent 50%), #230444;
+
+}
+
+.meshdark {
+  background: radial-gradient(at 18.383620525228565% 74.87500031789143%, #21033c 0px, transparent 50%), radial-gradient(at 86.48706880109064% 15.708333651224773%, #4d2e4d 0px, transparent 50%), radial-gradient(at 79.59051707695271% 74.0416669845581%, #260c40 0px, transparent 50%), radial-gradient(at 19.67672397350443% 20.083332061767578%, #300d30 0px, transparent 50%), #230444;
+
+}
+
+@theme {
+  --breakpoint-xs: 30rem;
+}
