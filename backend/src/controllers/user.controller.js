@@ -93,7 +93,7 @@ const loginUser = asyncHandler(async (req, res) => {
         console.log(`Welcome back ${user.fullName}`)
         const option = {
             httpOnly: true,
-            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+            sameSite: process.env.NODE_ENV === 'none',
             secure: process.env.NODE_ENV === 'production', // HTTPS only in prod
         };
         return res.status(200).cookie("accessToken", accessToken, option).cookie("refreshToken", refreshToken, option).json(

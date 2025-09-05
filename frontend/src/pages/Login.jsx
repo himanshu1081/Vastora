@@ -46,10 +46,10 @@ function Login() {
                     password: form.password
                 }
             )
-            const { _id, fullName, username, avatar, coverImage, email } = res?.data?.data?.userData;
-            dispatch(login(
-                { _id, fullName, username, avatar, coverImage, email }
-            ))
+            const { accessToken, userData } = res.data.data;
+            localStorage.setItem("accessToken", accessToken);
+
+            dispatch(login({ ...userData, token: accessToken }));
             naviagte("/")
         }
         catch (err) {
