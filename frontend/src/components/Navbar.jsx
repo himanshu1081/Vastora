@@ -182,8 +182,8 @@ const Navbar = () => {
             <div className="relative flex justify-center items-center gap-3 md:gap-5 px-2">
               <NavLink
                 to="/upload"
-                className="flex justify-center items-center transition-all duration-75 bg-purple-800 ease-in h-5 sm:h-10 w-15 
-                sm:w-25 gap-1 text-sm md:text-lg rounded-4xl hover:bg-purple-500 px-1"
+                className="flex justify-center items-center transition-all duration-75 bg-purple-700 ease-in h-5 sm:h-10 w-15 
+                sm:w-25 gap-1 text-sm md:text-lg rounded-4xl hover:bg-purple-800 px-1"
               >
                 <FaPlus className="size-2 sm:size-5" />
                 <span className="text-xs sm:text-base font-bold ">
