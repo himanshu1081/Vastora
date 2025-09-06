@@ -48,7 +48,7 @@ function Login() {
             )
             const { accessToken, userData } = res.data.data;
 
-            dispatch(login({ ...userData, token: accessToken }));
+            dispatch(login({ userData, token: accessToken }));
             naviagte("/")
         }
         catch (err) {
