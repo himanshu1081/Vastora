@@ -5,7 +5,6 @@ import { NavLink, useNavigate } from "react-router-dom"
 import axiosInstance from "../util/axiosIntance.js";
 import { login, } from "../features/authSlice.js";
 import { useDispatch } from "react-redux";
-import LightRays from "../components/LightRays.jsx"
 
 function Login() {
     const naviagte = useNavigate();
