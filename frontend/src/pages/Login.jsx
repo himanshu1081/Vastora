@@ -46,12 +46,9 @@ function Login() {
                     password: form.password
                 }
             )
-            const { accessToken, userData } = res.data.data;
-            localStorage.setItem("accessToken", accessToken);
-            localStorage.setItem("userData", JSON.stringify(userData));
+            const { userData } = res.data.data;
 
-
-            dispatch(login({ userData, token: accessToken }));
+            dispatch(login( userData ));
             naviagte("/")
         }
         catch (err) {

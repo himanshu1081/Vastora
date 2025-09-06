@@ -33,8 +33,7 @@ const Navbar = () => {
         });
         const user = res.data.data;
         if (user) {
-          const { _id, fullName, email, username, avatar } = user;
-          dispatch(login({ _id, fullName, email, username, avatar }));
+          dispatch(login(user));
         }
       } catch (err) {
         if (err?.response?.status === 401) {
