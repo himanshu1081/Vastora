@@ -27,7 +27,7 @@ function Profile() {
     const [userUpdateDetails, setUserUpdateDetails] = useState({
         fullName: userProfile?.fullName || "",
         email: userProfile?.email || "",
-        avatar: userProfile?.avatar || "",
+        avatar: userProfile?.avatar.replace(/^http:/, "https:") || "",
         coverImage: userProfile?.coverImage || ""
     })
 
@@ -39,7 +39,7 @@ function Profile() {
         const userDetails = async () => {
             const userInfo = await axiosInstance.get(`user/profile/${username}`)
             setUserProfile(userInfo?.data?.data)
-            setUserUpdateDetails({ fullName: userInfo?.data?.data?.fullName, email: userInfo?.data?.data?.email, avatar: userInfo?.data?.data?.avatar, coverImage: userInfo?.data?.data.coverImage })
+            setUserUpdateDetails({ fullName: userInfo?.data?.data?.fullName, email: userInfo?.data?.data?.email, avatar: userInfo?.data?.data?.avatar.replace(/^http:/, "https:"), coverImage: userInfo?.data?.data.coverImage })
         }
         userDetails()
     }, [])

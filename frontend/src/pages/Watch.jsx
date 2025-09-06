@@ -223,7 +223,7 @@ function Watch() {
                                                 className="flex w-full justify-between items-center gap-1 sm:gap-3">
                                                 <div
                                                     className="flex justify-between items-center gap-2 bg-[#171717] rounded-md p-1 px-2">
-                                                    <img src={watch?.ownerAvatar}
+                                                    <img src={watch?.ownerAvatar.replace(/^http:/, "https:")}
                                                         alt="avatar"
                                                         className="rounded-full w-8 h-8 md:w-10 lg:w-10 md:h-10 object-cover cursor-pointer"
                                                         onClick={() => navigate(`/profile/${watch?.ownerUsername}`)} />
@@ -280,7 +280,7 @@ function Watch() {
                                         <span>Comments</span>
                                         <div className="flex gap-2 justify-start items-center h-fit w-full p-1 md:p-2">
                                             <div>
-                                                <img src={isLoggedIn ? `${userData.avatar}` : "/assets/default-avatar.png"} alt="avatar" className="w-10 h-10 rounded-full object-cover" />
+                                                <img src={isLoggedIn ? `${userData.avatar.replace(/^http:/, "https:")}` : "/assets/default-avatar.png"} alt="avatar" className="w-10 h-10 rounded-full object-cover" />
                                             </div>
                                             <div>
                                                 <div ref={contentRef} contentEditable="true" placeholder="Add a comment..."
