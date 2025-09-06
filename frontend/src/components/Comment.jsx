@@ -20,7 +20,9 @@ const Comment = ({ avatar, content, fullName, createdAt, isMine = false, comment
         isLiked: false,
         isDisliked: false
     });
-    const secureAvatar = avatar.replace(/^http:/, "https:")
+    const secureAvatar = avatar
+        ? avatar.replace(/^http:/, "https:")
+        : "/default-avatar.png";
     const handleLike = async (type) => {
         if (!isLoggedIn) {
             setLoginPopup(true)

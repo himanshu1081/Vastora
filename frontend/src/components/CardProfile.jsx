@@ -17,7 +17,9 @@ const Card = ({ username, videoId, channelName, avatar, title, viewCount, thumbn
             return viewCount
         }
     }
-    const secureAvatar = avatar.replace(/^http:/, "https:")
+    const secureAvatar = avatar
+        ? avatar.replace(/^http:/, "https:")
+        : "/default-avatar.png";
     const navigate = useNavigate();
 
     return (

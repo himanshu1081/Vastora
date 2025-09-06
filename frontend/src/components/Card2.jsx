@@ -14,7 +14,9 @@ const Card2 = ({ channelName, avatar, title, viewCount, thumbnail, onClick, date
             return viewCount
         }
     }
-    const secureAvatar = avatar.replace(/^http:/, "https:")
+    const secureAvatar = avatar
+        ? avatar.replace(/^http:/, "https:")
+        : "/default-avatar.png";
     return (
         <>
             <div onClick={onClick}

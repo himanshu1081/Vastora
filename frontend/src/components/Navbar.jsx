@@ -191,7 +191,7 @@ const Navbar = () => {
                 </span>
               </NavLink>
               <img
-                src={userData?.avatar.replace(/^http:/, "https:")
+                src={userData?.avatar?.replace("http", "https")
                   || "/assets/default-avatar.png"}
                 className="rounded-full w-5 sm:w-10 h-5 sm:h-10 cursor-pointer aspect-square object-cover"
                 alt="your-avatar"
