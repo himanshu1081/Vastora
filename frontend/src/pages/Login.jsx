@@ -47,7 +47,6 @@ function Login() {
                 }
             )
             const { accessToken, userData } = res.data.data;
-            localStorage.setItem("accessToken", accessToken);
 
             dispatch(login({ ...userData, token: accessToken }));
             naviagte("/")
