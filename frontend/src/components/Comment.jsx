@@ -20,7 +20,7 @@ const Comment = ({ avatar, content, fullName, createdAt, isMine = false, comment
         isLiked: false,
         isDisliked: false
     });
-
+    const secureAvatar = avatar.replace(/^http:/, "https:")
     const handleLike = async (type) => {
         if (!isLoggedIn) {
             setLoginPopup(true)
@@ -92,7 +92,7 @@ const Comment = ({ avatar, content, fullName, createdAt, isMine = false, comment
                 }
 
                 <div className="cursor-pointer" onClick={() => navigate(`/profile/${username}`)}>
-                    <img src={avatar} alt="avatar" className="w-10 h-10 rounded-full object-cover" />
+                    <img src={secureAvatar} alt="avatar" className="w-10 h-10 rounded-full object-cover" />
                 </div>
                 <div>
                     <div className="flex gap-2 justify-start items-center">

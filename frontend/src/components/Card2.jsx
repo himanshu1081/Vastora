@@ -14,7 +14,7 @@ const Card2 = ({ channelName, avatar, title, viewCount, thumbnail, onClick, date
             return viewCount
         }
     }
-
+    const secureAvatar = avatar.replace(/^http:/, "https:")
     return (
         <>
             <div onClick={onClick}
@@ -26,7 +26,7 @@ const Card2 = ({ channelName, avatar, title, viewCount, thumbnail, onClick, date
                 </div>
                 <div className="flex gap-2 w-full p-1">
                     <div className=" flex justify-start items-baseline">
-                        <img src={avatar}
+                        <img src={secureAvatar}
                             alt="avatar"
                             className="object-cover h-6 w-8 md:h-10 md:w-12 rounded-full"
                         />

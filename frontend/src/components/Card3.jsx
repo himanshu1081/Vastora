@@ -16,7 +16,7 @@ const Card = ({ username, channelName, avatar, title, viewCount, thumbnail, date
             return viewCount
         }
     }
-
+    const secureAvatar = avatar.replace(/^http:/, "https:")
     const navigate = useNavigate();
 
     return (
@@ -30,7 +30,7 @@ const Card = ({ username, channelName, avatar, title, viewCount, thumbnail, date
                 </div>
                 <div className="flex gap-2 w-full p-1">
                     <div className=" flex justify-start items-baseline">
-                        <img src={avatar}
+                        <img src={secureAvatar}
                             alt="avatar"
                             className="object-cover h-6 w-8 md:h-10 md:w-12 rounded-full"
                         />

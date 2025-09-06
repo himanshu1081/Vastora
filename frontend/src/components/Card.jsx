@@ -18,7 +18,8 @@ const Card = ({ username, channelName, avatar, title, viewCount, thumbnail, date
     }
 
     const navigate = useNavigate();
-    const secureAvatar = avatar.replace("http", "https")
+    const secureAvatar = avatar.replace(/^http:/, "https:")
+
     return (
         <>
             <div onClick={onClick}
