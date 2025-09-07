@@ -90,7 +90,7 @@ const loginUser = asyncHandler(async (req, res) => {
         const { accessToken, refreshToken, userData } = await generateAccessTokenAndRefreshToken(user);
 
         console.log(`Welcome back ${user.fullName}`)
-        const options = {
+        const option = {
             httpOnly: true,
             secure: true,        // since you're on HTTPS (Vercel)
             sameSite: "none"     // force none for cross-site cookies
