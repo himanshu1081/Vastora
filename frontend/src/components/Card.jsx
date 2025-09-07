@@ -18,9 +18,6 @@ const Card = ({ username, channelName, avatar, title, viewCount, thumbnail, date
     }
 
     const navigate = useNavigate();
-    const secureAvatar = avatar
-        ? avatar.replace(/^http:/, "https:")
-        : "/default-avatar.png";
 
     return (
         <>
@@ -33,7 +30,7 @@ const Card = ({ username, channelName, avatar, title, viewCount, thumbnail, date
                 </div>
                 <div className="flex gap-2 w-full p-1">
                     <div className=" flex justify-start items-baseline">
-                        <img src={secureAvatar}
+                        <img src={avatar}
                             alt="avatar"
                             className="object-cover h-6 w-8 md:h-10 md:w-12 rounded-full"
                         />
