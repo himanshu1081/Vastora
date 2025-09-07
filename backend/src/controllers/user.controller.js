@@ -90,10 +90,10 @@ const loginUser = asyncHandler(async (req, res) => {
         const { accessToken, refreshToken, userData } = await generateAccessTokenAndRefreshToken(user);
 
         console.log(`Welcome back ${user.fullName}`)
-        const option = {
+        const options = {
             httpOnly: true,
-            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-            secure: process.env.NODE_ENV === 'production',
+            secure: true,        // since you're on HTTPS (Vercel)
+            sameSite: "none"     // force none for cross-site cookies
         };
         return res.status(200).cookie("accessToken", accessToken, option).cookie("refreshToken", refreshToken, option).json(
             new ApiResponse(200, { userData, accessToken, refreshToken }, "Cookies sent!")
