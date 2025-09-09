@@ -47,7 +47,7 @@ function Login() {
             )
             const { userData } = res.data.data;
 
-            dispatch(login( userData ));
+            dispatch(login(userData));
             naviagte("/")
         }
         catch (err) {

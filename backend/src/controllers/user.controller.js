@@ -92,11 +92,9 @@ const loginUser = asyncHandler(async (req, res) => {
         console.log(`Welcome back ${user.fullName}`)
         const option = {
             httpOnly: true,
-            secure: true,        // MUST be true for HTTPS
-            sameSite: "none",    // MUST be none for cross-site
-            maxAge: 24 * 60 * 60 * 1000, // optional, 1 day
-            path: "/",           // VERY important
-            domain: ".vastora.vercel.app" // must match your frontend domain
+            secure: true,       
+            sameSite: "none",    
+            maxAge: 24 * 60 * 60 * 1000
         };
 
         return res.status(200).cookie("accessToken", accessToken, option).cookie("refreshToken", refreshToken, option).json(
