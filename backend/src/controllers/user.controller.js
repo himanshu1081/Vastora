@@ -92,9 +92,9 @@ const loginUser = asyncHandler(async (req, res) => {
         console.log(`Welcome back ${user.fullName}`)
         const option = {
             httpOnly: true,
-            secure: true,       
-            sameSite: "none",    
-            maxAge: 24 * 60 * 60 * 1000
+            secure: true,
+            sameSite: "lax",
+            maxAge: 24 * 60 * 60 * 1000,
         };
 
         return res.status(200).cookie("accessToken", accessToken, option).cookie("refreshToken", refreshToken, option).json(
