@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom"
 import { IoSettings } from "react-icons/io5";
 
 const Card = ({ username, videoId, channelName, avatar, title, viewCount, thumbnail, date, onClick, ownProfile }) => {
+    const navigate = useNavigate();
 
 
     const views = () => {
@@ -16,7 +17,7 @@ const Card = ({ username, videoId, channelName, avatar, title, viewCount, thumbn
         } else {
             return viewCount
         }
-    } 
+    }
 
     return (
         <>
