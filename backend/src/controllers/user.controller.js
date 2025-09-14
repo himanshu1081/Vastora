@@ -92,8 +92,8 @@ const loginUser = asyncHandler(async (req, res) => {
         console.log(`Welcome back ${user.fullName}`)
         const option = {
             httpOnly: true,
-            secure: true,
-            sameSite: "none",
+            secure: process.env.NODE_ENV === "production", // only force https in prod
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
             maxAge: 24 * 60 * 60 * 1000,
         };
 
@@ -111,9 +111,10 @@ const logoutUser = asyncHandler(async (req, res) => {
     await userData.save({ validateBeforeSave: false })
     const option = {
         httpOnly: true,
-        sameSite: 'none',
-        secure: true
-    }
+        secure: process.env.NODE_ENV === "production", // only force https in prod
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        maxAge: 24 * 60 * 60 * 1000,
+    };
     res.clearCookie("refreshToken", option).clearCookie("accessToken", option).json({
         message: "Cookies cleared"
     })
