@@ -80,9 +80,13 @@
 
 .meshdark {
   background: radial-gradient(at 18.383620525228565% 74.87500031789143%, #21033c 0px, transparent 50%), radial-gradient(at 86.48706880109064% 15.708333651224773%, #4d2e4d 0px, transparent 50%), radial-gradient(at 79.59051707695271% 74.0416669845581%, #260c40 0px, transparent 50%), radial-gradient(at 19.67672397350443% 20.083332061767578%, #300d30 0px, transparent 50%), #230444;
-
 }
 
+.wait{
+  background-image: url("../public/assets/bg-image-wait2.jpeg");
+  background-size: cover;
+  background-position: center;
+}
 @theme {
   --breakpoint-xs: 30rem;
 }
