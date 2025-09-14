@@ -91,7 +91,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
         console.log(`Welcome back ${user.fullName}`)
 
-        const options = {
+        const options= {
             httpOnly: true,
             secure: true,
             sameSite: 'none',
@@ -114,7 +114,7 @@ const logoutUser = asyncHandler(async (req, res) => {
     const isProd = process.env.NODE_ENV === "production";
     const isCrossDomain = process.env.FRONTEND_URL !== process.env.BACKEND_URL; // or any logic you use
 
-    const options = {
+    const option = {
         httpOnly: true,
         secure: true,
         sameSite: 'none',
