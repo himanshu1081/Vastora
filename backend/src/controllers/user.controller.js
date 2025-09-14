@@ -91,7 +91,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
         console.log(`Welcome back ${user.fullName}`)
 
-        const options= {
+        const option= {
             httpOnly: true,
             secure: true,
             sameSite: 'none',
