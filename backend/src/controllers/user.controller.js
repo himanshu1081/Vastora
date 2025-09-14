@@ -90,15 +90,13 @@ const loginUser = asyncHandler(async (req, res) => {
         const { accessToken, refreshToken, userData } = await generateAccessTokenAndRefreshToken(user);
 
         console.log(`Welcome back ${user.fullName}`)
-        const isProd = process.env.NODE_ENV === "production";
-        const isCrossDomain = process.env.FRONTEND_URL !== process.env.BACKEND_URL; // or any logic you use
 
-        const option = {
+        const options = {
             httpOnly: true,
-            secure: isProd || isCrossDomain, // force HTTPS if prod or cross-domain
-            sameSite: (isProd || isCrossDomain) ? "none" : "lax", // none if prod or cross-domain
-            maxAge: 24 * 60 * 60 * 1000,
-        };
+            secure: true,
+            sameSite: 'none',
+            domain: 'vastora.onrender.com',
+        }
 
 
         return res.status(200).cookie("accessToken", accessToken, option).cookie("refreshToken", refreshToken, option).json(
@@ -116,12 +114,12 @@ const logoutUser = asyncHandler(async (req, res) => {
     const isProd = process.env.NODE_ENV === "production";
     const isCrossDomain = process.env.FRONTEND_URL !== process.env.BACKEND_URL; // or any logic you use
 
-    const option = {
+    const options = {
         httpOnly: true,
-        secure: isProd || isCrossDomain, // force HTTPS if prod or cross-domain
-        sameSite: (isProd || isCrossDomain) ? "none" : "lax", // none if prod or cross-domain
-        maxAge: 24 * 60 * 60 * 1000,
-    };
+        secure: true,
+        sameSite: 'none',
+        domain: 'vastora.onrender.com',
+    }
 
     res.clearCookie("refreshToken", option).clearCookie("accessToken", option).json({
         message: "Cookies cleared"
