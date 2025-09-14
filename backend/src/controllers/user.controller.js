@@ -90,12 +90,16 @@ const loginUser = asyncHandler(async (req, res) => {
         const { accessToken, refreshToken, userData } = await generateAccessTokenAndRefreshToken(user);
 
         console.log(`Welcome back ${user.fullName}`)
+        const isProd = process.env.NODE_ENV === "production";
+        const isCrossDomain = process.env.FRONTEND_URL !== process.env.BACKEND_URL; // or any logic you use
+
         const option = {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production", // only force https in prod
-            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+            secure: isProd || isCrossDomain, // force HTTPS if prod or cross-domain
+            sameSite: (isProd || isCrossDomain) ? "none" : "lax", // none if prod or cross-domain
             maxAge: 24 * 60 * 60 * 1000,
         };
+
 
         return res.status(200).cookie("accessToken", accessToken, option).cookie("refreshToken", refreshToken, option).json(
             new ApiResponse(200, { userData, accessToken, refreshToken }, "Cookies sent!")
@@ -109,12 +113,16 @@ const logoutUser = asyncHandler(async (req, res) => {
     const userData = req.user;
     userData.refreshToken = undefined;
     await userData.save({ validateBeforeSave: false })
+    const isProd = process.env.NODE_ENV === "production";
+    const isCrossDomain = process.env.FRONTEND_URL !== process.env.BACKEND_URL; // or any logic you use
+
     const option = {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production", // only force https in prod
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        secure: isProd || isCrossDomain, // force HTTPS if prod or cross-domain
+        sameSite: (isProd || isCrossDomain) ? "none" : "lax", // none if prod or cross-domain
         maxAge: 24 * 60 * 60 * 1000,
     };
+
     res.clearCookie("refreshToken", option).clearCookie("accessToken", option).json({
         message: "Cookies cleared"
     })
