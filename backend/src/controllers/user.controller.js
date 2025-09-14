@@ -4,7 +4,7 @@ import asyncHandler from "../utils/asyncHandler.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import uploadOnCloudinary from "../utils/cloudinary.js";
 import jwt from "jsonwebtoken";
-import mongoose, { Mongoose } from "mongoose";
+import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
 const registerUser = asyncHandler(async (req, res) => {

@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { showSidebar } from "../features/sidebarSlice.js";
 import { login, logout } from "../features/authSlice.js";
 import { AnimatePresence, motion } from "framer-motion";
+import { persistor } from "../app/store.js";
 import { useParams } from "react-router-dom";
 
 // Icons
@@ -58,6 +59,7 @@ const Navbar = () => {
     try {
       await axiosInstance.post("/user/logout", {}, { withCredentials: true });
       dispatch(logout());
+      persistor.purge();
       window.location.reload()
       navigate('/')
 
