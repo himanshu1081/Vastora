@@ -11,6 +11,7 @@ import { Toaster } from 'react-hot-toast';
 import 'video.js/dist/video-js.css'
 import LikedVideos from "./pages/LikedVideos.jsx";
 import Subscriptions from "./pages/Subscriptions.jsx";
+import Searched from "./pages/Searched.jsx";
 
 
 
@@ -64,6 +65,11 @@ const router = createBrowserRouter([
     path: "/subscription",
     element:
       <Subscriptions />
+  },
+  {
+    path: "/search/:query",
+    element:
+      <Searched />
   }
 ])
 

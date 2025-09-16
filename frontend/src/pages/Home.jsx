@@ -4,10 +4,13 @@ import { Navbar } from "../components/Navbar.jsx";
 import Sidebar from "../components/Sidebar.jsx";
 import axiosInstance from "../util/axiosIntance.js";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { storedVideos } from "../features/videoSlice.js";
 import "../index.css"
 
 function Home() {
     const [videos, setVideos] = useState([])
+    const dispatch = useDispatch()
     const navigate = useNavigate();
     const [renderPopup, setRenderPopup] = useState(false)
 
@@ -18,7 +21,7 @@ function Home() {
     useEffect(() => {
         const hasSeenNoticeDate = localStorage.getItem("hasSeenNoticeDate")
         const today = new Date().toISOString().split('T')[0]
-        if (hasSeenNoticeDate!=today) {
+        if (hasSeenNoticeDate != today) {
             setRenderPopup(true);
             localStorage.setItem("hasSeenNoticeDate", today);
         }
@@ -26,10 +29,11 @@ function Home() {
             try {
                 const res = await axiosInstance.get("/video");
                 setVideos(res?.data?.data);
+                dispatch(storedVideos(res?.data?.data));
                 setRenderPopup(false)
             } catch (err) {
-                console.error(err.response?.data?.message);
-                console.log("Error: ", err.message);
+                console.error("Error fetching videos:", err);
+                console.log("Error message:", err.message);
             }
         };
         fetchVideos();

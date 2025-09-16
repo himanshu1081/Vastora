@@ -15,6 +15,7 @@ import { CgProfile } from "react-icons/cg";
 import { FaPlus } from "react-icons/fa6";
 import { FiSidebar } from "react-icons/fi";
 import axiosInstance from "../util/axiosIntance.js";
+import Searched from "../pages/Searched.jsx";
 
 const Navbar = () => {
   const [search, setSearch] = useState("");
@@ -51,15 +52,21 @@ const Navbar = () => {
 
   const handleKey = (e) => {
     if (e.key === "Enter" && search.trim() !== "") {
-      // handleSearch() if needed
+      handleSearch();
     }
   };
+
+  const handleSearch = () => {
+    if (search.trim() != "")
+      navigate(`/search/${search}`);
+  }
 
   const handleLogout = async () => {
     try {
       await axiosInstance.post("/user/logout", {}, { withCredentials: true });
       dispatch(logout());
       persistor.purge();
+      setLogoutPopup(false)
       navigate('/')
 
     } catch (err) {
@@ -175,6 +182,7 @@ const Navbar = () => {
           <IoIosSearch
             color="white"
             className="transition-all duration-100 hover:bg-zinc-800 rounded-full size-6 sm:size-9 p-1 cursor-pointer"
+            onClick={handleSearch}
           />
         </div>
 
