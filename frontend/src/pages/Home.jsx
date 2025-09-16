@@ -26,6 +26,7 @@ function Home() {
             try {
                 const res = await axiosInstance.get("/video");
                 setVideos(res?.data?.data);
+                setRenderPopup(false)
             } catch (err) {
                 console.error(err.response?.data?.message);
                 console.log("Error: ", err.message);
