@@ -142,6 +142,7 @@ function Upload() {
                             cursorCharacter="_"
                             className="font-extrabold sm:text-5xl"
                         />
+                        <p>Notice: Can't upload video of size 100MB and above</p>
                     </div>
                     <div className="h-fit w-full flex justify-center items-center flex-col sm:flex-row text-base gap-2 sm:gap-4 ">
                         <div className="max-w-[1280px] w-full md:w-3/4 h-fit flex justify-center">

@@ -60,7 +60,6 @@ const Navbar = () => {
       await axiosInstance.post("/user/logout", {}, { withCredentials: true });
       dispatch(logout());
       persistor.purge();
-      window.location.reload()
       navigate('/')
 
     } catch (err) {
