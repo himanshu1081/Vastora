@@ -9,17 +9,23 @@ import "../index.css"
 function Home() {
     const [videos, setVideos] = useState([])
     const navigate = useNavigate();
-    const [renderPopup,setRenderPopup] = useState(true)
+    const [renderPopup, setRenderPopup] = useState(false)
 
     const handleClick = (videoId) => {
         navigate(`/watch/${videoId}`);
     }
+
     useEffect(() => {
+        const hasSeenNoticeDate = localStorage.getItem("hasSeenNoticeDate")
+        const today = new Date().toISOString().split('T')[0]
+        if (hasSeenNoticeDate!=today) {
+            setRenderPopup(true);
+            localStorage.setItem("hasSeenNoticeDate", today);
+        }
         const fetchVideos = async () => {
             try {
                 const res = await axiosInstance.get("/video");
                 setVideos(res?.data?.data);
-                setRenderPopup(false)
             } catch (err) {
                 console.error(err.response?.data?.message);
                 console.log("Error: ", err.message);
@@ -39,7 +45,7 @@ function Home() {
                                 <div className="h-2/4 w-80 sm:w-100 border-2 border-white/20 backdrop-blur-3xl rounded-2xl bg-white/20 flex justify-center items-center flex-col p-2 font-figtree text-white">
                                     <div className="text-3xl font-bold">Notice</div>
                                     <p className="text-center">
-                                        Backend is hosted on render. Server will take upto 50 seconds before it starts working normally.
+                                        Backend is hosted on Render. Server will take upto 50 seconds before it starts working normally.
                                     </p>
                                 </div>
                             </div>
