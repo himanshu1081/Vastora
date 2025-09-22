@@ -90,10 +90,10 @@ const Comment = ({ avatar, content, fullName, createdAt, isMine = false, comment
                     </>
                 }
 
-                <div className="cursor-pointer" onClick={() => navigate(`/profile/${username}`)}>
-                    <img src={avatar} alt="avatar" className="w-10 h-10 rounded-full object-cover" />
-                </div>
                 <div>
+                    <img src={avatar} alt="avatar" className="w-10 h-10 rounded-full object-cover cursor-pointer" onClick={() => navigate(`/profile/${username}`)} />
+                </div>
+                <div className="full">
                     <div className="flex gap-2 justify-start items-center">
                         <span className="cursor-pointer" onClick={() => navigate(`/profile/${username}`)}>
                             {fullName}
@@ -103,7 +103,7 @@ const Comment = ({ avatar, content, fullName, createdAt, isMine = false, comment
                         </span>
                     </div>
                     <div
-                        className="w-50 sm:w-90 md:w-100 lg:w-110 xl:w-160 2xl:w-180 outline-none ">
+                        className="w-50 sm:w-90 md:w-100 lg:w-110 xl:w-160 2xl:w-180 outline-none break-words overflow-hidden">
                         {content}
                     </div>
                     <div className="flex w-fit rounded-4xl h-fit gap-2 md:gap-6p-2 text-white/50 pt-2">

@@ -287,17 +287,17 @@ function Watch() {
                                                             : "/assets/default-avatar.png"
                                                     }
                                                     alt="avatar"
-                                                    className="w-10 h-10 rounded-full object-cover"
+                                                    className="w-11 h-10 rounded-full object-cover"
                                                 />
                                             </div>
-                                            <div>
+                                            <div className="w-full">
                                                 <div ref={contentRef} contentEditable="true" placeholder="Add a comment..."
-                                                    className="border-b-2 w-50 sm:w-90 md:w-100 lg:w-110 xl:w-160 2xl:w-180 outline-none "
+                                                    className="border-b-2 w-11/12 outline-none "
                                                     onInput={handleCommentChange}>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="  flex justify-end w-full">
+                                        <div className="flex justify-end w-full">
                                             <span
                                                 className=" rounded-4xl border-1 border-white/20 flex justify-end bg-purple-800 p-2 px-6 hover:bg-purple-900 cursor-pointer font-figtree font-bold"
                                                 onClick={isLoggedIn ? handleComment : () => setLoginPopup(true)}>
@@ -309,10 +309,10 @@ function Watch() {
                                             {showPreview ? <div>Hide Comments</div> : <div>Show Comments</div>}
                                         </div>
 
-                                        <div className={`transition-all duration-200 ease-in-out w-full flex justify-start items-center overflow-hidden ${showPreview ? "max-h-fit" : "max-h-0"}`}>
+                                        <div className={`transition-all duration-200 ease-in-out w-full overflow-hidden ${showPreview ? "max-h-[1000px]" : "max-h-0"}`}>
                                             {commentPreview.length > 0 ?
                                                 (
-                                                    < div >
+                                                    < div className="w-fit" >
                                                         {
                                                             commentPreview.map((comment) => (
                                                                 <Comment
