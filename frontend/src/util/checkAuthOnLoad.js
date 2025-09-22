@@ -7,6 +7,6 @@ export const checkAuthOnLoad = (store) => {
 
   if (!token) {
     store.dispatch(logout());
-    persistor.purge(); /
+    persistor.purge();
   }
 };
