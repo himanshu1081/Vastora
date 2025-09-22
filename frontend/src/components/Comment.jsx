@@ -108,12 +108,12 @@ const Comment = ({ avatar, content, fullName, createdAt, isMine = false, comment
                     </div>
                     <div className="flex w-fit rounded-4xl h-fit gap-2 md:gap-6p-2 text-white/50 pt-2">
                         <span className={`transition-all duration-150 ease-in-out w-fit flex items-center gap-1 cursor-pointer hover:text-white ${commentInfo.isLiked ? "text-white" : ""}`}>
-                            <BiLike className="h-4 md:h-5 w-fit "
+                            <BiLike className="h-4 md:h-5 w-fit"
                                 onClick={() => commentInfo.isLiked ? (handleLike("unlike")) : handleLike("like")} />
                             {commentInfo?.likes}
                         </span>
                         <span className={`transition-all duration-150 ease-in-out w-fit flex items-center gap-1 cursor-pointer hover:text-white ${commentInfo.isDisliked ? "text-white" : ""}`}>
-                            <BiDislike className="h-4 md:h-5 w-fit "
+                            <BiDislike className="h-4 md:h-5 w-fit"
                                 onClick={() => commentInfo.isDisliked ? (handleLike("undislike")) : handleLike("dislike")} />
                             {commentInfo?.dislikes}
                         </span>

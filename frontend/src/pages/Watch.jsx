@@ -343,7 +343,7 @@ function Watch() {
                                     </div>
                                 </div>
                                 {/* Right Suggestions */}
-                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 md:w-3/12 mx-auto">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 md:w-7/24 mx-auto">
                                     {videos.filter((video) => video._id != videoId).map((video) => (
                                         <div key={video._id} className="aspect-video p-1">
                                             <Card2
