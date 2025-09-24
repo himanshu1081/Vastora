@@ -133,7 +133,7 @@ function Upload() {
             <div className="bg-black h-screen text-lg text-white w-screen font-figtree pt-15 pb-5 md:pb-2 sm:pt-25 sm:p-4 overflow-scroll hide-scrollbar flex justify-center items-center">
                 <div
                     className="bg-[#8200db]/10 w-3/4 sm:w-4/4 md:w-3/4 h-full border-2 border-white/30 flex flex-col rounded-lg  items-center p-2 md:p-4 gap-3 sm:gap-4 overflow-scroll hide-scrollbar">
-                    <div >
+                    <div className="text-center" >
                         <TextType
                             text={["Upload your video", "Grow your channel", "Vast Aura"]}
                             typingSpeed={75}
@@ -142,7 +142,7 @@ function Upload() {
                             cursorCharacter="_"
                             className="font-extrabold sm:text-5xl"
                         />
-                        <p>Notice: Can't upload video of size 100MB and above</p>
+                        <p className="text-sm md:text-base">Notice: Can't upload video of size 100MB and above</p>
                     </div>
                     <div className="h-fit w-full flex justify-center items-center flex-col sm:flex-row text-base gap-2 sm:gap-4 ">
                         <div className="max-w-[1280px] w-full md:w-3/4 h-fit flex justify-center">
