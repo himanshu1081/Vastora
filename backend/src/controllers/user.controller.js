@@ -118,7 +118,6 @@ const logoutUser = asyncHandler(async (req, res) => {
         httpOnly: true,
         secure: true,
         sameSite: 'none',
-        domain: 'vastora.onrender.com',
     }
 
     res.clearCookie("refreshToken", option).clearCookie("accessToken", option).json({
