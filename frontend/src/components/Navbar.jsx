@@ -220,9 +220,9 @@ const Navbar = () => {
               <NavLink
                 to="/login"
                 className="flex justify-center items-center transition-all duration-200 ease-in-out 
-              h-5 sm:h-10 w-10 sm:w-20 text-xs sm:text-base md:text-xl p-2 rounded-4xl font-extrabold bg-[#8200db]/30 hover:bg-[#8200db]/50"
+              h-5 sm:h-10 w-10 sm:w-20 text-xs sm:text-base whitespace-nowrap md:text-xl p-2 rounded-4xl font-extrabold bg-[#8200db]/30 hover:bg-[#8200db]/50"
               >
-                Login
+                Log in
               </NavLink>
             </div>
           )}
