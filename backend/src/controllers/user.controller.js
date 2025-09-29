@@ -91,7 +91,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
         console.log(`Welcome back ${user.fullName}`)
 
-        const option= {
+        const option = {
             httpOnly: true,
             secure: true,
             sameSite: 'none',
@@ -364,7 +364,14 @@ const getWatchHistory = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, watchHistory[0], "Watch History fetched successfully"))
 });
 
+
+const freeEndPoint = asyncHandler(async (req, res) => {
+    return res.status(200).json({ success: true, message: "Service is alive" });
+});
+
+
+
 export {
     loginUser, registerUser, logoutUser, refreshAccessToken, getWatchHistory, updateDetails,
-    changePassword, currentUser, updateAvatar, updateCoverImage, getUserChannelProfile
+    changePassword, currentUser, updateAvatar, updateCoverImage, getUserChannelProfile,freeEndPoint
 };
