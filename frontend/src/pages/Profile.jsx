@@ -313,7 +313,7 @@ function Profile() {
                         </span>
                         <div className="flex justify-center items-center w-full">
                             <div className="w-full grid grid-cols-1 gap-2 h-fit place-items-center md:gap-4 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 rounded-2xl">
-                                {userProfile?.videos?.map((video) => (
+                                {Array.isArray(userProfile?.videos) && [...(userProfile?.videos)]?.reverse().map((video) => (
                                     <CardProfile
                                         key={video._id}
                                         username={userProfile.username}

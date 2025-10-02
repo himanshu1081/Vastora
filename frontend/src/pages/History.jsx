@@ -31,9 +31,9 @@ function History() {
                 {
                     history?.watchHistory?.length > 0 ?
                         (
-                            <div className="flex flex-col justify-center items-center md:w-screen lg:w-250 sm:px-5 md:pl-20 gap-2">
+                            <div className="flex flex-col justify-center items-start md:w-screen sm:px-5 md:pl-20 gap-4">
                                 <span className="flex justify-center items-center md:justify-start w-full md:text-4xl font-extrabold">History</span>
-                                {history?.watchHistory?.map((video) => (
+                                {[...(history?.watchHistory)].reverse().map((video) => (
                                     <Card3
                                         key={video._id}
                                         channelName={video.ownerFullname}

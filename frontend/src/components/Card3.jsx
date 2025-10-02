@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom"
 
 const Card = ({ username, channelName, avatar, title, viewCount, thumbnail, date, onClick }) => {
 
-
+    const navigate = useNavigate();
     const views = () => {
         if (viewCount > 999999999) {
             const result = viewCount / 1000000000
@@ -20,7 +20,7 @@ const Card = ({ username, channelName, avatar, title, viewCount, thumbnail, date
     return (
         <>
             <div onClick={onClick}
-                className="transition-all duration-100 ease-in md:h-4/4 w-75 sm:w-full md:w-full border-2 border-white/20 backdrop-blur-2xl bg-[#0b0b0b] text-white rounded-2xl p-2 hover:bg-[#8200db]/10 cursor-pointer sm:flex">
+                className="transition-all duration-100 ease-in md:h-4/4 w-75 sm:w-full md:w-2/4 border-2 border-white/20 backdrop-blur-2xl bg-[#0b0b0b] text-white rounded-2xl p-2 hover:bg-[#8200db]/10 cursor-pointer sm:flex">
                 <div className="aspect-video w-full rounded-lg overflow-hidden border-2 border-black/20 backdrop-blur-2xl ">
                     <img src={thumbnail} alt="thumbnail"
                         className="rounded-lg object-contain"
