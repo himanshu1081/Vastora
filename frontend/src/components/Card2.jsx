@@ -6,7 +6,7 @@ const Card2 = ({ channelName, avatar, title, viewCount, thumbnail, onClick, date
             const result = viewCount / 1000000000
             return result.toFixed(1) + "B"
         } else if (viewCount > 999999) {
-            const result = viewCount / 100000
+            const result = viewCount / 1000000
             return result.toFixed(1) + "M"
         } else if (viewCount > 999) {
             return Math.floor(viewCount / 1000) + "K"
