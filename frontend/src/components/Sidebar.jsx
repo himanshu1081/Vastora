@@ -30,7 +30,7 @@ function Sidebar() {
                 onClick={onClick}
             >
                 <div>{icon}</div>
-                {sidebar && <span>{label}</span>}
+                {sidebar && <span className="whitespace-nowrap">{label}</span>}
             </NavLink>
         );
     };
