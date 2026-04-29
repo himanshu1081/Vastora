@@ -7,10 +7,12 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { storedVideos } from "../features/videoSlice.js";
 import "../index.css"
+import VideoCardSkeleton from "../components/VideoCardSkeleton.jsx";
 
 function Home() {
     const [videos, setVideos] = useState([])
     const dispatch = useDispatch()
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const [renderPopup, setRenderPopup] = useState(false)
 
@@ -19,65 +21,56 @@ function Home() {
     }
 
     useEffect(() => {
-        const hasSeenNoticeDate = localStorage.getItem("hasSeenNoticeDate")
-        const today = new Date().toISOString().split('T')[0]
-        if (hasSeenNoticeDate != today) {
-            setRenderPopup(true);
-            localStorage.setItem("hasSeenNoticeDate", today);
-        }
         const fetchVideos = async () => {
             try {
+                setLoading(true);
                 const res = await axiosInstance.get("/video");
                 setVideos(res?.data?.data);
                 dispatch(storedVideos(res?.data?.data));
-                setRenderPopup(false)
             } catch (err) {
                 console.error("Error fetching videos:", err);
-                console.log("Error message:", err.message);
+            } finally {
+                setLoading(false);
             }
         };
+
         fetchVideos();
     }, []);
 
 
     return (
         <>
-            {
-                renderPopup ?
-                    (
-                        <>
-                            <div className="meshdark h-screen w-screen flex justify-center items-center">
-                                <div className="h-2/4 w-80 sm:w-100 border-2 border-white/20 backdrop-blur-3xl rounded-2xl bg-white/20 flex justify-center items-center flex-col p-2 font-figtree text-white">
-                                    <div className="text-3xl font-bold">Notice</div>
-                                    <p className="text-center">
-                                        Backend is hosted on Render. Server will take upto 50 seconds before it starts working normally.
-                                    </p>
+            <>
+                <Sidebar />
+                <Navbar />
+
+                <div className="bg-black min-h-screen max-w-screen font-figtree pt-15 pb-5 sm:pt-25 overflow-x-hidden hide-scrollbar">
+                    <div className="w-full grid grid-cols-1 gap-1 sm:gap-2 md:gap-4 place-items-center xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 sm:px-5 md:pl-20">
+
+                        {loading
+                            ? Array(10).fill(0).map((_, i) => (
+                                <div key={i} className="w-full max-w-sm">
+                                    <VideoCardSkeleton />
                                 </div>
-                            </div>
-                        </>
-                    )
-                    :
-                    (
-                        <>
-                            <Sidebar />
-                            <Navbar />
-                            <div className="bg-black h-screen text-lg text-black w-screen font-figtree pt-15 pb-5 sm:pt-25 overflow-x-hidden hide-scrollbar ">
-                                <div className="w-full grid grid-cols-1 gap-1 sm:gap-2 md:gap-4 place-items-center xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 sm:px-5 md:pl-20">
-                                    {videos.map((video) => (
-                                        <Card
-                                            key={video._id}
-                                            channelName={video.ownerName}
-                                            avatar={video.ownerAvatar} title={video.title}
-                                            thumbnail={video.thumbnail} viewCount={video.views}
-                                            username={video.ownerUsername}
-                                            date={video.createdAt.split('T')[0].split('-').reverse().join('-')}
-                                            onClick={() => handleClick(video._id)} />
-                                    ))}
-                                </div>
-                            </div>
-                        </>
-                    )
-            }
+                            ))
+                            : videos.map((video) => (
+                                <Card
+                                    key={video._id}
+                                    channelName={video.ownerName}
+                                    avatar={video.ownerAvatar}
+                                    title={video.title}
+                                    thumbnail={video.thumbnail}
+                                    viewCount={video.views}
+                                    username={video.ownerUsername}
+                                    date={video.createdAt.split('T')[0].split('-').reverse().join('-')}
+                                    onClick={() => handleClick(video._id)}
+                                />
+                            ))
+                        }
+
+                    </div>
+                </div>
+            </>
         </>
     )
 }
