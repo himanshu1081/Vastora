@@ -53,7 +53,7 @@ function Home() {
                                     <VideoCardSkeleton />
                                 </div>
                             ))
-                            : videos.map((video) => (
+                            : videos?.map((video) => (
                                 <Card
                                     key={video._id}
                                     channelName={video.ownerName}
